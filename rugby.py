@@ -24,7 +24,7 @@ cols = cols_to_move + [col for col in data if col not in cols_to_move]
 data=data[cols]
 
 
-st.write(data.sort_values(by=['Week','Date'], ascending=[True,True]))
+# st.write(data.sort_values(by=['Week','Date'], ascending=[True,True]))
 
 
 def spread_workings(data):
@@ -223,7 +223,7 @@ with st.beta_expander('CORRECT Power Ranking Matrix Multiplication'):
     power_df=df_power.loc[:,['Week','ID','adj_spread']].copy()
 
     games_df=matrix_df_1.copy()
-    st.write('Checking the games df', games_df)
+    st.write('Checking the games df', games_df.sort_values(by='Week'))
     first=list(range(-3,18))
     last=list(range(0,21))
     for first,last in zip(first,last):
@@ -232,21 +232,24 @@ with st.beta_expander('CORRECT Power Ranking Matrix Multiplication'):
         # st.write('this is first',first)
         # st.write('this is first week ADJUSTED MATRIX is below',first)
         first_section=games_df[games_df['Week'].between(first,last)]
-        # st.write('Checking the first_section',first_section)
+        # st.write('Checking the first_section',first_section.sort_values(by='Week'))
         full_game_matrix=games_matrix_workings(first_section)
-        # st.write('this if full game matrix',full_game_matrix,'this is current week',last)
-        adjusted_matrix=full_game_matrix.loc[0:6,0:6]
-        # st.write(adjusted_matrix)
+        # st.write('this if full game matrix',full_game_matrix)
+        adjusted_matrix=full_game_matrix.loc[0:14,0:14]
+        # st.write('adjusted matrix',adjusted_matrix)
         # st.write('this is the last number ADJUSTED MATRIX is back up',last)
         
         df_inv = pd.DataFrame(np.linalg.pinv(adjusted_matrix.values), adjusted_matrix.columns, adjusted_matrix.index)
-        # st.write('this is the inverse matrix',df_inv, 'last number ie current week', last)
+        # st.write('this is the inverse matrix',df_inv)
         # st.write('this is shape of inverse matrix', df_inv.shape)
 
+        # st.write('check ID 10 AND week number 0 I think is last')
+        # st.write('this is last', last)
+        # st.write(power_df)
         power_df_week=power_df[power_df['Week']==last].drop_duplicates(subset=['ID'],keep='last').set_index('ID')\
-        .drop('Week',axis=1).rename(columns={'adj_spread':0}).loc[:6,:]
+        .drop('Week',axis=1).rename(columns={'adj_spread':0}).loc[:14,:]
         
-        # st.write('this is the power_df_week',power_df_week)
+        # st.write('this is the power_df_week PROBLEM IS HERE ID 10',power_df_week)
         # st.write('this is the shape', power_df_week.shape)
         # st.write(pd.DataFrame(power_df_week).dtypes)
         # st.write('this is PD Dataframe power df week',pd.DataFrame(power_df_week) )
@@ -254,13 +257,15 @@ with st.beta_expander('CORRECT Power Ranking Matrix Multiplication'):
         # st.header('this is result of matrix multplication')
         # st.write(result)
         result.columns=['power']
-        avg=(result['power'].sum())/8
-        result['avg_pwr_rank']=(result['power'].sum())/8
+        avg=(result['power'].sum())/16
+        result['avg_pwr_rank']=(result['power'].sum())/16
         result['final_power']=result['avg_pwr_rank']-result['power']
         df_pwr=pd.DataFrame(columns=['final_power'],data=[avg])
         result=pd.concat([result,df_pwr],ignore_index=True)
+        
         result['week']=last+1
         power_ranking.append(result)
+        # st.write('check result after concat', result)
         # st.write('week no.', last)
         # st.header('end xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     power_ranking_combined = pd.concat(power_ranking).reset_index().rename(columns={'index':'ID'})
@@ -307,7 +312,7 @@ with st.beta_expander('Adding Season to Date Cover to Matches'):
     # st.write('Get STDC by Week do something similar for Power Rank')
     # last_occurence = spread_3.groupby(['ID'],as_index=False).last()
     # st.write(last_occurence)
-    stdc_df=pd.merge(spread_3,team_names_id,on='ID').rename(columns={'Away Team':'Team'})
+    stdc_df=pd.merge(spread_3,team_names_id,on='ID').rename(columns={'Home Team':'Team'})
     st.write('Check for Team as causing an issue?', stdc_df)
     stdc_df=stdc_df.loc[:,['Week','Team','cover']].copy()
     # stdc_df['last_week']=
@@ -326,3 +331,159 @@ with st.beta_expander('Adding Season to Date Cover to Matches'):
     # https://vega.github.io/vega/docs/schemes/
     text_cover=chart_cover.mark_text().encode(text=alt.Text('cover:N'),color=alt.value('black'))
     st.altair_chart(chart_cover + text_cover,use_container_width=True)
+
+with st.beta_expander('Adding Turnover to Matches'):
+    st.write('this is turnovers', turnover_3)
+    turnover_matches = turnover_3.loc[:,['Date','Week','ID','prev_turnover', 'turnover_sign']].copy()
+    turnover_home=turnover_matches.rename(columns={'ID':'Home ID'})
+    
+    turnover_away=turnover_matches.rename(columns={'ID':'Away ID'})
+    turnover_away['turnover_sign']=-turnover_away['turnover_sign']
+    updated_df=pd.merge(updated_df,turnover_home,on=['Date','Week','Home ID'],how='left').rename(columns={'prev_turnover':'home_prev_turnover','turnover_sign':'home_turnover_sign'})
+    updated_df=pd.merge(updated_df,turnover_away,on=['Date','Week','Away ID'],how='left').rename(columns={'prev_turnover':'away_prev_turnover','turnover_sign':'away_turnover_sign'})
+    # st.write('check matches week 20', updated_df)
+    # TEST Workings
+    # st.write('check that Turnover coming in correctly', updated_df[updated_df['Week']==18])
+    # st.write('Check Total')
+    # st.write('home',updated_df['home_turnover_sign'].sum())
+    # st.write('away',updated_df['away_turnover_sign'].sum())
+    # turnover_excel=test_data_2020.loc[:,['Week','Home ID','Home Team', 'Away ID', 'Away Team','excel_home_prev_turnover','excel_away_prev_turnover','excel_home_turnover_sign','excel_away_turnover_sign']].copy()
+    # test_turnover=pd.merge(updated_df,turnover_excel)
+    # test_turnover['test_1']=test_turnover['home_prev_turnover']-test_turnover['excel_home_prev_turnover']
+    # test_turnover['test_2']=test_turnover['away_prev_turnover']-test_turnover['excel_away_prev_turnover']
+    # st.write(test_turnover[test_turnover['test_1']!=0])
+    # st.write(test_turnover[test_turnover['test_2']!=0])
+    # st.write(test_turnover)
+
+with st.beta_expander('Betting Slip Matches'):
+    betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
+    'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign','home_cover_sign','away_cover_sign','power_pick','home_cover_result']]
+    # st.write('check for duplicate home cover', betting_matches)
+    betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+    betting_matches['away_cover_sign']+betting_matches['power_pick']
+    betting_matches['bet_on'] = np.where(betting_matches['total_factor']>2,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-2,betting_matches['Away Team'],''))
+    betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>2,1,np.where(betting_matches['total_factor']<-2,-1,0)))
+    betting_matches['bet_sign'] = betting_matches['bet_sign'].astype(float)
+    betting_matches['home_cover'] = betting_matches['home_cover'].astype(float)
+    # st.write('this is bet sign',betting_matches['bet_sign'].dtypes)
+    # st.write('this is home cover',betting_matches['home_cover'].dtypes)
+    betting_matches['result']=betting_matches['home_cover_result'] * betting_matches['bet_sign']
+    st.write('testing sum of betting result',betting_matches['result'].sum())
+
+    # this is for graphing anlaysis on spreadsheet
+    betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
+    betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
+    st.write('testing sum of betting all result',betting_matches['result_all'].sum())
+    # st.write('testing factor')
+    # st.write(betting_matches['total_factor'].sum())
+    cols_to_move=['Week','Date','Home Team','Away Team','bet_on','Spread','home_power','away_power','Home Points','Away Points','total_factor']
+    cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
+    betting_matches=betting_matches[cols]
+    betting_matches=betting_matches.sort_values('Date')
+    # st.write(betting_matches)
+    # st.write(betting_matches.dtypes)
+    presentation_betting_matches=betting_matches.copy()
+
+    
+    # def color_negative_red(val):
+    #     color = 'red' if val < 0 else 'black'
+    #     return 'color: %s' % color
+    # presentation_betting_matches['Spread'] = presentation_betting_matches['Spread'].apply(color_negative_red)
+
+
+
+
+    # presentation_betting_matches['home_power'] = presentation_betting_matches['home_power'].apply("{:.1f}".format)
+    # presentation_betting_matches['away_power'] = presentation_betting_matches['away_power'].apply("{:.1f}".format)
+    # presentation_betting_matches['Date'] = presentation_betting_matches['Date'].dt.strftime('%m/%d/%Y')
+    
+    
+
+    # AgGrid(presentation_betting_matches)
+    
+
+    # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
+    grid_height = st.number_input("Grid height", min_value=400, value=550, step=100)
+    gb = GridOptionsBuilder.from_dataframe(presentation_betting_matches)
+    gb.configure_column("Spread", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
+    gb.configure_column("home_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
+    gb.configure_column("away_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
+    gb.configure_column("Date", type=["dateColumnFilter","customDateTimeFormat"], custom_format_string='dd-MM-yyyy', pivot=True)
+    gb.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+
+
+
+    test_cellsytle_jscode = JsCode("""
+    function(params) {
+        if (params.value < 0) {
+        return {
+            'color': 'red',
+        }
+        } else {
+            return {
+                'color': 'black',
+            }
+        }
+    };
+    """)
+    # # https://github.com/PablocFonseca/streamlit-aggrid/blob/main/st_aggrid/grid_options_builder.py
+    gb.configure_column(field="Spread", cellStyle=test_cellsytle_jscode)
+    gb.configure_column("home_power", cellStyle=test_cellsytle_jscode)
+    gb.configure_column("away_power", cellStyle=test_cellsytle_jscode)
+
+
+    # gb.configure_pagination()
+    # gb.configure_side_bar()
+    gb.configure_grid_options(domLayout='normal')
+    gridOptions = gb.build()
+    grid_response = AgGrid(
+        presentation_betting_matches, 
+        gridOptions=gridOptions,
+        height=grid_height, 
+        width='100%',
+        # data_return_mode=return_mode_value, 
+        # update_mode=update_mode_value,
+        # fit_columns_on_grid_load=fit_columns_on_grid_load,
+        allow_unsafe_jscode=True, #Set it to True to allow jsfunction to be injected
+        enable_enterprise_modules=True,
+    )
+
+    # container.grid_response
+    # AgGrid(betting_matches.sort_values('Date').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}"}))
+    
+
+
+
+
+    # st.write('Below is just checking an individual team')
+    # st.write( betting_matches[(betting_matches['Home Team']=='Arizona Cardinals') | 
+    # (betting_matches['Away Team']=='Arizona Cardinals')].set_index('Week').sort_values(by='Date') )
+
+with st.beta_expander('Power Ranking by Week'):
+    power_week=power_ranking_combined.copy()
+    # st.write('power', power_week)
+
+    # pivot_df=power_week.loc[:,['ID','final_power','week']].copy()
+    team_names_id=team_names_id.rename(columns={'Home Team':'Team'})
+    id_names=team_names_id.drop_duplicates(subset=['ID'], keep='first')
+    pivot_df=pd.merge(power_week,id_names, on='ID')
+    # st.write('after merge', pivot_df)
+    pivot_df=pivot_df.loc[:,['Team','final_power','week']].copy()
+    # st.write('graphing?',pivot_df)
+    power_pivot=pd.pivot_table(pivot_df,index='Team', columns='week')
+    pivot_df_test = pivot_df.copy()
+    pivot_df_test=pivot_df_test[pivot_df_test['week']<19]
+    pivot_df_test['average']=pivot_df.groupby('Team')['final_power'].transform(np.mean)
+    # st.write('graphing?',pivot_df_test)
+    power_pivot.columns = power_pivot.columns.droplevel(0)
+    power_pivot['average'] = power_pivot.mean(axis=1)
+    # st.write(power_pivot)
+    # https://stackoverflow.com/questions/67045668/altair-text-over-a-heatmap-in-a-script
+    pivot_df=pivot_df.sort_values(by='final_power',ascending=False)
+    chart_power= alt.Chart(pivot_df_test).mark_rect().encode(alt.X('week:O',axis=alt.Axis(title='week',labelAngle=0)),
+    alt.Y('Team',sort=alt.SortField(field='average', order='descending')),color=alt.Color('final_power:Q',scale=alt.Scale(scheme='redyellowgreen')))
+    # https://altair-viz.github.io/gallery/layered_heatmap_text.html
+    # https://vega.github.io/vega/docs/schemes/
+    text=chart_power.mark_text().encode(text=alt.Text('final_power:N',format=",.0f"),color=alt.value('black'))
+    st.altair_chart(chart_power + text,use_container_width=True)
+    # https://github.com/altair-viz/altair/issues/820#issuecomment-386856394
