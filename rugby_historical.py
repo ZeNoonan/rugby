@@ -13,7 +13,7 @@ url='C:/Users/Darragh/Documents/Python/rugby/rugby_test.xlsx'
 data=pd.read_excel(url,sheet_name='data')
 # st.write(data)
 
-team_names_id=pd.read_excel(url,sheet_name='ID')
+team_names_id=pd.read_excel(url,sheet_name='ID',converters={'Date':pd.to_datetime})
 
 fb_ref_2020=pd.merge(data,team_names_id,on='Home Team').rename(columns={'ID':'Home ID'})
 # st.write(fb_ref_2020)
@@ -24,8 +24,8 @@ cols = cols_to_move + [col for col in data if col not in cols_to_move]
 data=data[cols]
 
 
-# st.write(data.sort_values(by=['Week','Date'], ascending=[True,True]))
-
+# st.write(data.sort_values(by=['Week'], ascending=[True]))
+st.write('The Power Ranking in spreadsheet is incorrect to do with the home 3 points being deducted rather than added on')
 
 def spread_workings(data):
     data['home_win']=data['Home Points'] - data['Away Points']
@@ -50,7 +50,8 @@ def turnover_workings(data,week_start):
     season_cover=pd.concat([home_turnover_df,away_turnover_df],ignore_index=True)
     # season_cover_df = pd.melt(season_cover_df,id_vars=['Week', 'home_cover'],value_vars=['Home ID', 'Away ID']).set_index('Week').rename(columns={'value':'ID'}).\
     # drop('variable',axis=1).reset_index().sort_values(by=['Week','ID'],ascending=True)
-    return season_cover.sort_values(by=['Week','Date','ID'],ascending=['True','True','True'])
+    st.write('Testing season cover', season_cover.sort_values(by=['Week','ID'],ascending=['True','True']))
+    return season_cover.sort_values(by=['Week','ID'],ascending=['True','True'])
 
 def turnover_2(season_cover_df):    
     # https://stackoverflow.com/questions/53335567/use-pandas-shift-within-a-group
@@ -227,9 +228,9 @@ with st.beta_expander('CORRECT Power Ranking Matrix Multiplication'):
     first=list(range(-3,18))
     last=list(range(0,21))
     for first,last in zip(first,last):
-        # st.header('start xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+        st.header('start xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
         # st.write('week no.', last)
-        # st.write('this is first',first)
+        st.write('this is first',first)
         # st.write('this is first week ADJUSTED MATRIX is below',first)
         first_section=games_df[games_df['Week'].between(first,last)]
         # st.write('Checking the first_section',first_section.sort_values(by='Week'))
@@ -249,13 +250,13 @@ with st.beta_expander('CORRECT Power Ranking Matrix Multiplication'):
         power_df_week=power_df[power_df['Week']==last].drop_duplicates(subset=['ID'],keep='last').set_index('ID')\
         .drop('Week',axis=1).rename(columns={'adj_spread':0}).loc[:12,:]
         
-        # st.write('this is the power_df_week PROBLEM IS HERE ID 10',power_df_week)
+        st.write('this is the power_df_week PROBLEM IS HERE ID 10',power_df_week)
         # st.write('this is the shape', power_df_week.shape)
         # st.write(pd.DataFrame(power_df_week).dtypes)
         # st.write('this is PD Dataframe power df week',pd.DataFrame(power_df_week) )
         result = df_inv.dot(pd.DataFrame(power_df_week))
-        # st.header('this is result of matrix multplication')
-        # st.write(result)
+        st.header('this is result of matrix multplication')
+        st.write(result)
         result.columns=['power']
         avg=(result['power'].sum())/14
         result['avg_pwr_rank']=(result['power'].sum())/14
@@ -266,8 +267,8 @@ with st.beta_expander('CORRECT Power Ranking Matrix Multiplication'):
         result['week']=last+1
         power_ranking.append(result)
         # st.write('check result after concat', result)
-        # st.write('week no.', last)
-        # st.header('end xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+        st.write('week no.', last)
+        st.header('end xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     power_ranking_combined = pd.concat(power_ranking).reset_index().rename(columns={'index':'ID'})
     st.write('power ranking combined', power_ranking_combined)
 
@@ -358,7 +359,7 @@ with st.beta_expander('Adding Turnover to Matches'):
 with st.beta_expander('Betting Slip Matches'):
     betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
     'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign','home_cover_sign','away_cover_sign','power_pick','home_cover_result']]
-    # st.write('check for duplicate home cover', betting_matches)
+    # st.write('check for duplicate home cover', betting_matches.sort_values(by=['Week','Date']))
     betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
     betting_matches['away_cover_sign']+betting_matches['power_pick']
     betting_matches['bet_on'] = np.where(betting_matches['total_factor']>2,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-2,betting_matches['Away Team'],''))
@@ -382,7 +383,7 @@ with st.beta_expander('Betting Slip Matches'):
     betting_matches=betting_matches.sort_values('Date')
     # st.write(betting_matches)
     # st.write(betting_matches.dtypes)
-    presentation_betting_matches=betting_matches.copy()
+    presentation_betting_matches=betting_matches.sort_values(by=['Week','Date']).copy()
 
     
     # def color_negative_red(val):
