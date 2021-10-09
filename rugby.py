@@ -357,3 +357,19 @@ with st.beta_expander('Power Ranking by Week'):
     text=chart_power.mark_text().encode(text=alt.Text('final_power:N',format=",.0f"),color=alt.value('black'))
     st.altair_chart(chart_power + text,use_container_width=True)
     # https://github.com/altair-viz/altair/issues/820#issuecomment-386856394
+
+with st.beta_expander('Analysis of Betting Results across 1 to 5 factors'):
+    # matches_in_regular_season= (32 * 16) / 2
+    # st.write('In 2020 there were 13 matches in playoffs looks like this was new so 269 total matches in 2020 season compared with 267 in previous seasons')
+    # matches_in_playoffs = 13
+    # total_matches =matches_in_regular_season + matches_in_playoffs
+    # st.write('total_matches per my calculation',total_matches)
+    analysis=betting_matches.copy()
+    totals = analysis.groupby('total_factor').agg(winning=('result_all','count'))
+    totals_1=analysis.groupby([analysis['total_factor'].abs(),'result_all']).agg(winning=('result_all','count')).reset_index()
+    totals_1['result_all']=totals_1['result_all'].replace({0:'tie',1:'win',-1:'lose'})
+    st.write('shows the number of games at each factor level')
+    st.write(totals.rename(columns={'winning':'number_of_games'}))
+    st.write('sum of each factor level should correspond to table above',totals_1)
+    st.write('sum of winning column should be 267 I think',totals_1['winning'].sum())
+    st.write('count of week column should be 267',analysis['Week'].count())
