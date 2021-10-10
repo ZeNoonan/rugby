@@ -1,19 +1,22 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-from io import BytesIO
-import os
-import base64 
+# from io import BytesIO
+# import os
+# import base64 
 import altair as alt
 # from st_aggrid import AgGrid
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
-data=pd.read_excel(url,sheet_name='data')
+# url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
+url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
+data=pd.read_csv(url)
+# data=pd.read_excel(url,sheet_name='data')
 # st.write(data)
 
-team_names_id=pd.read_excel(url,sheet_name='ID')
+# team_names_id=pd.read_excel(url,sheet_name='ID')
+team_names_id=pd.read_csv('https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_id.csv')
 
 fb_ref_2020=pd.merge(data,team_names_id,on='Home Team').rename(columns={'ID':'Home ID'})
 # st.write(fb_ref_2020)
@@ -271,7 +274,7 @@ with st.beta_expander('Betting Slip Matches'):
     st.write('testing sum of betting all result',betting_matches['result_all'].sum())
     # st.write('testing factor')
     # st.write(betting_matches['total_factor'].sum())
-    cols_to_move=['Week','Date','Home Team','Away Team','bet_on','Spread','home_power','away_power','Home Points','Away Points','total_factor']
+    cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
     cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
     betting_matches=betting_matches[cols]
     betting_matches=betting_matches.sort_values('Date')
