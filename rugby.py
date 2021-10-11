@@ -277,7 +277,7 @@ with st.beta_expander('Betting Slip Matches'):
     cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
     cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
     betting_matches=betting_matches[cols]
-    betting_matches=betting_matches.sort_values('Date')
+    betting_matches=betting_matches.sort_values(['Week','Date'],ascending=[True,True])
     # st.write(betting_matches)
     # st.write(betting_matches.dtypes)
     presentation_betting_matches=betting_matches.copy()
