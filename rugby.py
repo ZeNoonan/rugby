@@ -330,7 +330,7 @@ with st.beta_expander('Betting Slip Matches'):
 
     # container.grid_response
     # AgGrid(betting_matches.sort_values('Date').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}"}))
-    
+    # update
 
 
 
