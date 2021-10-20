@@ -67,139 +67,139 @@ Week,Date,Home Team,Away Team,Spread,Home Points,Away Points,home_turnovers_won,
 4,16-Oct,Edinburgh,Bulls,-2,17,10,11,4,-7,14,17,-3
 4,16-Oct,Munster,Connacht,-16,20,18,8,5,-3,8,13,-5
 4,16-Oct,Cardiff Blues,Sharks,-6,23,17,11,7,-4,13,9,4
-5,22-Oct,Glasgow Warriors,Leinster,12,,,,,,,,
-5,22-Oct,Scarlets,Benetton,-9,,,,,,,,
-5,23-Oct,Zebre,Edinburgh,4,,,,,,,,
-5,23-Oct,Cardiff Blues,Dragons,-6,,,,,,,,
-5,23-Oct,Connacht,Ulster,4,,,,,,,,
-5,04-Dec,Lions,Sharks,,,,,,,,,
-5,04-Dec,Stormers,Bulls,,,,,,,,,
-5,23-Oct,Ospreys,Munster,12,,,,,,,,
-6,26-Nov,Connacht,Ospreys,,,,,,,,,
-6,27-Nov,Stormers,Zebre,,,,,,,,,
-6,27-Nov,Benetton,Glasgow Warriors,,,,,,,,,
-6,27-Nov,Sharks,Scarlets,,,,,,,,,
-6,27-Nov,Bulls,Munster,,,,,,,,,
-6,27-Nov,Dragons,Edinburgh,,,,,,,,,
-6,27-Nov,Leinster,Ulster,,,,,,,,,
-6,28-Nov,Lions,Cardiff Blues,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-7,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-8,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-9,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-10,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-11,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-12,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-13,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-14,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-15,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-16,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-17,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-18,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-19,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-20,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
-21,31-Dec,,,,,,,,,,,
+5,22-Oct,Glasgow Warriors,Leinster,12,0,0,0,0,0,0,0,0
+5,22-Oct,Scarlets,Benetton,-9,0,0,0,0,0,0,0,0
+5,23-Oct,Zebre,Edinburgh,4,0,0,0,0,0,0,0,0
+5,23-Oct,Cardiff Blues,Dragons,-6,0,0,0,0,0,0,0,0
+5,23-Oct,Connacht,Ulster,4,0,0,0,0,0,0,0,0
+5,04-Dec,Lions,Sharks,0,0,0,0,0,0,0,0,0
+5,04-Dec,Stormers,Bulls,0,0,0,0,0,0,0,0,0
+5,23-Oct,Ospreys,Munster,12,0,0,0,0,0,0,0,0
+6,26-Nov,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+6,27-Nov,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+6,27-Nov,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+6,27-Nov,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+6,27-Nov,Bulls,Munster,0,0,0,0,0,0,0,0,0
+6,27-Nov,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+6,27-Nov,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+6,28-Nov,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+7,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+7,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+7,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+7,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+7,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+7,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+7,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+7,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+8,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+8,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+8,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+8,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+8,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+8,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+8,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+8,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+9,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+9,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+9,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+9,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+9,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+9,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+9,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+9,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+10,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+10,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+10,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+10,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+10,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+10,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+10,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+10,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+11,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+11,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+11,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+11,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+11,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+11,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+11,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+11,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+12,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+12,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+12,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+12,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+12,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+12,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+12,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+12,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+13,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+13,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+13,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+13,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+13,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+13,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+13,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+13,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+14,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+14,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+14,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+14,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+14,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+14,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+14,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+14,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+15,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+15,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+15,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+15,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+15,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+15,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+15,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+15,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+16,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+16,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+16,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+16,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+16,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+16,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+16,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+16,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+17,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+17,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+17,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+17,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+17,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+17,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+17,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+17,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+18,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+18,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+18,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+18,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+18,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+18,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+18,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+18,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+19,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+19,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+19,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+19,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+19,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+19,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+19,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+19,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+20,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+20,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+20,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+20,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+20,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+20,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+20,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+20,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+21,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
+21,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
+21,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
+21,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
+21,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
+21,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
+21,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
+21,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
