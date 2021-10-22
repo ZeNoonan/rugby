@@ -5,13 +5,30 @@ import streamlit as st
 # import os
 # import base64 
 import altair as alt
+import datetime as dt
 # from st_aggrid import AgGrid
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
-data=pd.read_csv(url)
+
+results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+def csv_save(x):
+    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
+    return x
+csv_save(results_excel)
+
+data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+
+# data['Date']=pd.to_datetime(data['Date'],errors='coerce')
+data['year']=data['Date'].dt.year
+data['month']=data['Date'].dt.month
+data['day']=data['Date'].dt.day
+data=data.drop(['Date'],axis=1)
+data['Date']=pd.to_datetime(data[['year','month','day']])
+
+
 # data=pd.read_excel(url,sheet_name='data')
 # st.write(data)
 
@@ -37,6 +54,7 @@ def spread_workings(data):
     np.where(((data['Home Points']+ data['Spread']) < data['Away Points']),-1,0)))
     data['home_cover']=data['home_cover'].astype(int)
     data['away_cover'] = -data['home_cover']
+    data['Date']=pd.to_datetime(data['Date'])
     # data=data.rename(columns={'Net Turnover':'home_turnover'})
     # data['away_turnover'] = -data['home_turnover']
     return data
@@ -113,6 +131,7 @@ matrix_df['away_pts_adv'] = 3
 matrix_df['away_spread']=-matrix_df['Spread']
 matrix_df=matrix_df.rename(columns={'Spread':'home_spread'})
 matrix_df_1=matrix_df.loc[:,['unique_match_id','Week','Home ID','Away ID','at_home','at_away','home_spread','away_spread','home_pts_adv','away_pts_adv','Date','Home Points','Away Points']].copy()
+# st.write('checking matrix', matrix_df_1.dtypes)
 
 # with st.beta_expander('Games Played to be used in Matrix Multiplication'):
 first_qtr=matrix_df_1.copy()
@@ -278,8 +297,9 @@ with st.beta_expander('Betting Slip Matches'):
     cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
     betting_matches=betting_matches[cols]
     betting_matches=betting_matches.sort_values(['Week','Date'],ascending=[True,True])
-    # st.write(betting_matches)
     # st.write(betting_matches.dtypes)
+    # st.write(betting_matches)
+    
     presentation_betting_matches=betting_matches.copy()
 
     # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
