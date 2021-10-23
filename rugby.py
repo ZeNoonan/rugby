@@ -246,6 +246,9 @@ np.where(updated_df['spread_working'] < 0,-1,0))
 # st.write(updated_df)
 
 with st.beta_expander('Season to Date Cover Factor by Team'):
+    st.write('Positive number means the number of games to date that you have covered the spread; in other words teams with a positive number have beaten expectations')
+    st.write('Negative number means the number of games to date that you have not covered the spread; in other words teams with a negative number have performed below expectations')
+    st.write('blanks in graph are where the team got a bye week')
     stdc_home=spread_3.rename(columns={'ID':'Home ID'})
     stdc_home['cover_sign']=-stdc_home['cover_sign']
     stdc_away=spread_3.rename(columns={'ID':'Away ID'})
@@ -266,14 +269,30 @@ with st.beta_expander('Season to Date Cover Factor by Team'):
     text_cover=chart_cover.mark_text().encode(text=alt.Text('cover:N'),color=alt.value('black'))
     st.altair_chart(chart_cover + text_cover,use_container_width=True)
 
-# with st.beta_expander('Adding Turnover to Matches'):
-# st.write('this is turnovers', turnover_3)
-turnover_matches = turnover_3.loc[:,['Date','Week','ID','prev_turnover', 'turnover_sign']].copy()
-turnover_home=turnover_matches.rename(columns={'ID':'Home ID'})
-turnover_away=turnover_matches.rename(columns={'ID':'Away ID'})
-turnover_away['turnover_sign']=-turnover_away['turnover_sign']
-updated_df=pd.merge(updated_df,turnover_home,on=['Date','Week','Home ID'],how='left').rename(columns={'prev_turnover':'home_prev_turnover','turnover_sign':'home_turnover_sign'})
-updated_df=pd.merge(updated_df,turnover_away,on=['Date','Week','Away ID'],how='left').rename(columns={'prev_turnover':'away_prev_turnover','turnover_sign':'away_turnover_sign'})
+with st.beta_expander('Turnover Factor by Match Graph'):
+    st.write('-1 means you received more turnovers than other team, 1 means you gave up more turnovers to other team')
+    # st.write('this is turnovers', turnover_3)
+    turnover_matches = turnover_3.loc[:,['Date','Week','ID','prev_turnover', 'turnover_sign']].copy()
+    turnover_home=turnover_matches.rename(columns={'ID':'Home ID'})
+    turnover_away=turnover_matches.rename(columns={'ID':'Away ID'})
+    turnover_away['turnover_sign']=-turnover_away['turnover_sign']
+    updated_df=pd.merge(updated_df,turnover_home,on=['Date','Week','Home ID'],how='left').rename(columns={'prev_turnover':'home_prev_turnover','turnover_sign':'home_turnover_sign'})
+    updated_df=pd.merge(updated_df,turnover_away,on=['Date','Week','Away ID'],how='left').rename(columns={'prev_turnover':'away_prev_turnover','turnover_sign':'away_turnover_sign'})
+
+    df_stdc_1=pd.merge(turnover_matches,team_names_id,on='ID').rename(columns={'Home Team':'Team'})
+    # st.write(df_stdc_1)
+    df_stdc_1['average']=df_stdc_1.groupby('Team')['turnover_sign'].transform(np.mean)
+
+    color_scale = alt.Scale(domain=[1,0,-1],range=["red", "lightgrey","LimeGreen"])
+
+    chart_cover= alt.Chart(df_stdc_1).mark_rect().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
+    # alt.Y('Team',sort=alt.SortField(field='average', order='ascending')),color=alt.Color('turnover_sign:Q',scale=alt.Scale(scheme='redyellowgreen')))
+    alt.Y('Team',sort=alt.SortField(field='average', order='ascending')),color=alt.Color('turnover_sign:Q',scale=color_scale))
+    # https://altair-viz.github.io/gallery/layered_heatmap_text.html
+    # https://vega.github.io/vega/docs/schemes/
+    
+    text_cover=chart_cover.mark_text().encode(text=alt.Text('turnover_sign:N'),color=alt.value('black'))
+    st.altair_chart(chart_cover + text_cover,use_container_width=True)
 
 with st.beta_expander('Betting Slip Matches'):
     betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
@@ -358,6 +377,28 @@ with st.beta_expander('Betting Slip Matches'):
     # st.write('Below is just checking an individual team')
     # st.write( betting_matches[(betting_matches['Home Team']=='Arizona Cardinals') | 
     # (betting_matches['Away Team']=='Arizona Cardinals')].set_index('Week').sort_values(by='Date') )
+
+with st.beta_expander('Power Pick Factor by Team'):
+    st.write('Positive number means the market has undervalued the team as compared to the spread')
+    st.write('Negative number means the market has overvalued the team as compared to the spread')    
+    power_factor=betting_matches.loc[:,['Week','Home Team','Away Team','power_pick']].rename(columns={'power_pick':'home_power_pick'})
+    power_factor['away_power_pick']=-power_factor['home_power_pick']
+    home_factor=power_factor.loc[:,['Week','Home Team','home_power_pick']].rename(columns={'Home Team':'Team','home_power_pick':'power_pick'})
+    away_factor=power_factor.loc[:,['Week','Away Team','away_power_pick']].rename(columns={'Away Team':'Team','away_power_pick':'power_pick'})
+    graph_power_pick=pd.concat([home_factor,away_factor],axis=0).sort_values(by=['Week'])
+    graph_power_pick['average']=graph_power_pick.groupby('Team')['power_pick'].transform(np.mean)
+
+    color_scale = alt.Scale(domain=[1,0,-1],range=["LimeGreen", "lightgrey","red"])
+
+    chart_cover= alt.Chart(graph_power_pick).mark_rect().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
+    # alt.Y('Team',sort=alt.SortField(field='average', order='ascending')),color=alt.Color('turnover_sign:Q',scale=alt.Scale(scheme='redyellowgreen')))
+    alt.Y('Team',sort=alt.SortField(field='average', order='descending')),color=alt.Color('power_pick:Q',scale=color_scale))
+    text_cover=chart_cover.mark_text().encode(text=alt.Text('power_pick:N'),color=alt.value('black'))
+    st.altair_chart(chart_cover + text_cover,use_container_width=True)
+    # st.write('graph',graph_power_pick)
+    # st.write('data',power_factor)
+
+
 
 with st.beta_expander('Power Ranking by Week'):
     power_week=power_ranking_combined.copy()
