@@ -10,14 +10,17 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-# url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
-url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
+
+finished_week=5
+
+url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
+# url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-csv_save(results_excel)
+# csv_save(results_excel)
 
 data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
 
@@ -32,8 +35,9 @@ data['Date']=pd.to_datetime(data[['year','month','day']])
 # data=pd.read_excel(url,sheet_name='data')
 # st.write(data)
 
-# team_names_id=pd.read_excel(url,sheet_name='ID')
-team_names_id=pd.read_csv('https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_id.csv')
+team_names_id=pd.read_excel(url,sheet_name='ID')
+# team_names_id=pd.read_csv('https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_id.csv')
+
 
 fb_ref_2020=pd.merge(data,team_names_id,on='Home Team').rename(columns={'ID':'Home ID'})
 # st.write(fb_ref_2020)
@@ -83,12 +87,41 @@ def season_cover_3(data,column_sign,name):
     data[column_sign] = np.where((data[name] > 0), 1, np.where((data[name] < 0),-1,0))
     return data
 
+def penalty_workings(data,week_start):
+    turnover_df=data[data['Week']>week_start].copy()
+    turnover_df['home_penalty_sign'] = np.where((turnover_df['penalties_conceded'] > 0), 1, np.where((turnover_df['penalties_conceded'] < 0),-1,0))
+    turnover_df['away_penalty_sign'] = - turnover_df['home_penalty_sign']
+    # season_cover_df=(data.set_index('Week').loc[week_start:,:]).reset_index()
+    home_turnover_df = (turnover_df.loc[:,['Week','Date','Home ID','home_penalty_sign']]).rename(columns={'Home ID':'ID','home_penalty_sign':'penalty_sign'})
+    # st.write('checking home turnover section', home_turnover_df[home_turnover_df['ID']==0])
+    away_turnover_df = (turnover_df.loc[:,['Week','Date','Away ID','away_penalty_sign']]).rename(columns={'Away ID':'ID','away_penalty_sign':'penalty_sign'})
+    # st.write('checking away turnover section', away_turnover_df[away_turnover_df['ID']==0])
+    season_cover=pd.concat([home_turnover_df,away_turnover_df],ignore_index=True)
+    # season_cover_df = pd.melt(season_cover_df,id_vars=['Week', 'home_cover'],value_vars=['Home ID', 'Away ID']).set_index('Week').rename(columns={'value':'ID'}).\
+    # drop('variable',axis=1).reset_index().sort_values(by=['Week','ID'],ascending=True)
+    return season_cover.sort_values(by=['Week','Date','ID'],ascending=['True','True','True'])
+
+def penalty_2(season_cover_df):    
+    # https://stackoverflow.com/questions/53335567/use-pandas-shift-within-a-group
+    season_cover_df['prev_penalty']=season_cover_df.groupby('ID')['penalty_sign'].shift()
+    return season_cover_df.sort_values(by=['ID','Week'],ascending=True)
+    # return season_cover_df
+
+def penalty_cover_3(data,column_sign,name):
+    data[column_sign] = np.where((data[name] > 0), 1, np.where((data[name] < 0),-1,0))
+    return data
 # with st.beta_expander('Last Game Turnover'):
 turnover=spread_workings(data)
 turnover_1 = turnover_workings(turnover,-1)
 turnover_2=turnover_2(turnover_1)
 turnover_3=season_cover_3(turnover_2,'turnover_sign','prev_turnover')
 # st.write(turnover_3.sort_values(by=['ID','Week'],ascending=['True','True']))
+
+penalty=spread_workings(data)
+# st.write('where is penalty??', penalty)
+penalty_1 = penalty_workings(penalty,-1)
+penalty_2=penalty_2(penalty_1)
+penalty_3=penalty_cover_3(penalty_2,'penalty_sign','prev_penalty')
 
 def season_cover_workings(data,home,away,name,week_start):
     season_cover_df=data[data['Week']>week_start].copy()
@@ -294,6 +327,31 @@ with st.beta_expander('Turnover Factor by Match Graph'):
     text_cover=chart_cover.mark_text().encode(text=alt.Text('turnover_sign:N'),color=alt.value('black'))
     st.altair_chart(chart_cover + text_cover,use_container_width=True)
 
+with st.beta_expander('Penalty Factor by Match Graph'):
+    st.write('-1 means you received more turnovers than other team, 1 means you gave up more turnovers to other team')
+    # st.write('this is turnovers', turnover_3)
+    penalty_matches = penalty_3.loc[:,['Date','Week','ID','prev_penalty', 'penalty_sign']].copy()
+    penalty_home=penalty_matches.rename(columns={'ID':'Home ID'})
+    penalty_away=penalty_matches.rename(columns={'ID':'Away ID'})
+    penalty_away['penalty_sign']=-penalty_away['penalty_sign']
+    penalty_df=pd.merge(updated_df,penalty_home,on=['Date','Week','Home ID'],how='left').rename(columns={'prev_penalty':'home_prev_penalty','turnover_sign':'home_turnover_sign'})
+    updated_df=pd.merge(updated_df,turnover_away,on=['Date','Week','Away ID'],how='left').rename(columns={'prev_turnover':'away_prev_turnover','turnover_sign':'away_turnover_sign'})
+
+    df_stdc_1=pd.merge(turnover_matches,team_names_id,on='ID').rename(columns={'Home Team':'Team'})
+    # st.write(df_stdc_1)
+    df_stdc_1['average']=df_stdc_1.groupby('Team')['turnover_sign'].transform(np.mean)
+
+    color_scale = alt.Scale(domain=[1,0,-1],range=["red", "lightgrey","LimeGreen"])
+
+    chart_cover= alt.Chart(df_stdc_1).mark_rect().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
+    # alt.Y('Team',sort=alt.SortField(field='average', order='ascending')),color=alt.Color('turnover_sign:Q',scale=alt.Scale(scheme='redyellowgreen')))
+    alt.Y('Team',sort=alt.SortField(field='average', order='ascending')),color=alt.Color('turnover_sign:Q',scale=color_scale))
+    # https://altair-viz.github.io/gallery/layered_heatmap_text.html
+    # https://vega.github.io/vega/docs/schemes/
+    
+    text_cover=chart_cover.mark_text().encode(text=alt.Text('turnover_sign:N'),color=alt.value('black'))
+    st.altair_chart(chart_cover + text_cover,use_container_width=True)
+
 with st.beta_expander('Betting Slip Matches'):
     betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
     'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign','home_cover_sign','away_cover_sign','power_pick','home_cover_result']]
@@ -429,11 +487,144 @@ with st.beta_expander('Analysis of Betting Results across 1 to 5 factors'):
     # total_matches =matches_in_regular_season + matches_in_playoffs
     # st.write('total_matches per my calculation',total_matches)
     analysis=betting_matches.copy()
+    # totals = analysis.groupby('total_factor').agg(winning=('result_all','count'))
+    # totals_1=analysis.groupby([analysis['total_factor'].abs(),'result_all']).agg(winning=('result_all','count')).reset_index()
+    # totals_1['result_all']=totals_1['result_all'].replace({0:'tie',1:'win',-1:'lose'})
+
+    # st.write('shows the number of games at each factor level')
+    # st.write(totals.rename(columns={'winning':'number_of_games'}))
+    # st.write('sum of each factor level should correspond to table above',totals_1)
+    # st.write('sum of winning column should be 267 I think',totals_1['winning'].sum())
+    # st.write('count of week column should be 267',analysis['Week'].count())
+
+    analysis=analysis[analysis['Week']<finished_week+1]
+    # st.write('analysis',analysis)
     totals = analysis.groupby('total_factor').agg(winning=('result_all','count'))
+    totals_graph=totals.reset_index().rename(columns={'winning':'number_of_games'})
+
+    # st.write('totals grpah', totals_graph)
+    chart_power= alt.Chart(totals_graph).mark_bar().encode(alt.X('total_factor:O',axis=alt.Axis(title='total_factor_per_match',labelAngle=0)),
+    alt.Y('number_of_games'))
+    text=chart_power.mark_text(dy=-7).encode(text=alt.Text('number_of_games:N',format=",.0f"),color=alt.value('black'))
+    st.altair_chart(chart_power + text,use_container_width=True)
+    
     totals_1=analysis.groupby([analysis['total_factor'].abs(),'result_all']).agg(winning=('result_all','count')).reset_index()
     totals_1['result_all']=totals_1['result_all'].replace({0:'tie',1:'win',-1:'lose'})
-    st.write('shows the number of games at each factor level')
-    st.write(totals.rename(columns={'winning':'number_of_games'}))
-    st.write('sum of each factor level should correspond to table above',totals_1)
-    st.write('sum of winning column should be 267 I think',totals_1['winning'].sum())
-    st.write('count of week column should be 267',analysis['Week'].count())
+    # st.write('checking graph data',totals_1.dtypes)
+    # totals_1['total_factor']=totals_1['total_factor'].astype(str)
+    # st.write('checking graph data',totals_1.dtypes)
+    # st.write('checking graph data',totals_1)
+    # https://www.quackit.com/css/css_color_codes.cfm
+    color_scale = alt.Scale(
+    domain=[
+        "lose",
+        "tie",
+        "win"],
+        range=["red", "lightgrey","LimeGreen"])
+    chart_power= alt.Chart(totals_1).mark_bar().encode(alt.X('total_factor:O',axis=alt.Axis(title='factor',labelAngle=0)),
+    alt.Y('winning'),color=alt.Color('result_all',scale=color_scale))
+    # st.altair_chart(chart_power,use_container_width=True)
+
+    
+    normalized_table = (totals_1[totals_1['result_all']!='tie']).copy()
+    # st.write('graph date to be cleaned',totals_1)
+    chart_power= alt.Chart(normalized_table).mark_bar().encode(alt.X('total_factor:O',axis=alt.Axis(title='factor',labelAngle=0)),
+    alt.Y('winning',stack="normalize"),color=alt.Color('result_all',scale=color_scale))
+    overlay = pd.DataFrame({'winning': [0.5]})
+    vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=2).encode(y='winning:Q')
+    text = alt.Chart(normalized_table).mark_text(dx=-1, dy=+60, color='white').encode(
+    x=alt.X('total_factor:O'),
+    y=alt.Y('winning',stack="normalize"),
+    detail='winning',
+    text=alt.Text('winning:Q', format='.0f'))
+    updated_test_chart=chart_power+vline+text
+    
+    st.altair_chart(updated_test_chart,use_container_width=True)
+
+    # st.write('shows the number of games at each factor level')
+    # st.write(totals.rename(columns={'winning':'number_of_games'}))
+    # st.write('sum of each factor level should correspond to table above',totals_1)
+    # st.write('sum of winning column should be 267 I think',totals_1['winning'].sum())
+    # st.write('count of week column should be 267',analysis['Week'].count())
+
+with st.beta_expander('Analysis of Factors'):
+    analysis_factors = betting_matches.copy()
+    analysis_factors=analysis_factors[analysis_factors['Week']<finished_week+1]
+    # st.write('check for penalties', analysis_factors)
+    def analysis_factor_function(analysis_factors):
+        analysis_factors['home_turnover_success?'] = analysis_factors['home_turnover_sign'] * analysis_factors['home_cover_result']
+        analysis_factors['away_turnover_success?'] = analysis_factors['away_turnover_sign'] * analysis_factors['home_cover_result']
+        analysis_factors['home_cover_season_success?'] = analysis_factors['home_cover_sign'] * analysis_factors['home_cover_result']  
+        analysis_factors['away_cover_season_success?'] = analysis_factors['away_cover_sign'] * analysis_factors['home_cover_result']
+        analysis_factors['power_ranking_success?'] = analysis_factors['power_pick'] * analysis_factors['home_cover_result']
+        df_table = analysis_factors['home_turnover_success?'].value_counts()
+        away_turnover=analysis_factors['away_turnover_success?'].value_counts()
+        home_cover=analysis_factors['home_cover_season_success?'].value_counts()
+        away_cover=analysis_factors['away_cover_season_success?'].value_counts()
+        power=analysis_factors['power_ranking_success?'].value_counts()
+        df_table_1=pd.concat([df_table,away_turnover,home_cover,away_cover,power],axis=1)
+        # df_table_1=pd.concat([df_table,away_turnover,home_cover,away_cover,power],axis=1).reset_index().drop('index',axis=1)
+        # st.write('df table', df_table_1)
+        # test=df_table_1.reset_index()
+        # st.write(test)
+        df_table_1['total_turnover'] = df_table_1['home_turnover_success?'].add (df_table_1['away_turnover_success?'])
+        # st.write(test)
+        df_table_1['total_season_cover'] = df_table_1['home_cover_season_success?'] + df_table_1['away_cover_season_success?']
+        # st.write('df table 2', df_table_1)
+        df_table_1.loc['Total']=df_table_1.sum()
+        # st.write('latest', df_table_1)
+        # st.write('latest', df_table_1.shape)
+        if df_table_1.shape > (2,7):
+            # st.write('Returning df with analysis')
+            df_table_1.loc['No. of Bets Made'] = df_table_1.loc[[1,-1]].sum() # No losing bets so far!!!
+            df_table_1.loc['% Winning'] = ((df_table_1.loc[1] / df_table_1.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
+        else:
+            # st.write('Returning df with no analysis')
+            return df_table_1
+        return df_table_1
+    total_factor_table = analysis_factor_function(analysis_factors)   
+    st.write('This is the total number of matches broken down by Factor result')
+    cols_to_move=['total_turnover','total_season_cover','power_ranking_success?']
+    total_factor_table = total_factor_table[ cols_to_move + [ col for col in total_factor_table if col not in cols_to_move ] ]
+    total_factor_table=total_factor_table.loc[:,['total_turnover','total_season_cover','power_ranking_success?']]
+    st.write(total_factor_table)
+    factor_bets = (analysis_factors[analysis_factors['bet_sign']!=0]).copy()
+    bets_made_factor_table = analysis_factor_function(factor_bets)
+    # cols_to_move=['total_turnover','total_season_cover','power_ranking_success?']
+    bets_made_factor_table = bets_made_factor_table[ cols_to_move + [ col for col in bets_made_factor_table if col not in cols_to_move ] ]
+    bets_made_factor_table=bets_made_factor_table.loc[:,['total_turnover','total_season_cover','power_ranking_success?']]
+    st.write('This is the matches BET ON broken down by Factor result')
+    st.write(bets_made_factor_table)
+
+    # st.write('graph work below')
+    graph_factor_table = total_factor_table.copy().loc[[-1,0,1],:].reset_index().rename(columns={'index':'result_all'})
+    graph_factor_table['result_all']=graph_factor_table['result_all'].replace({0:'tie',1:'win',-1:'lose'})
+    graph_factor_table=graph_factor_table.melt(id_vars='result_all',var_name='total_factor',value_name='winning')
+    chart_power= alt.Chart(graph_factor_table).mark_bar().encode(alt.X('total_factor:O',axis=alt.Axis(title='factor',labelAngle=0)),
+    alt.Y('winning'),color=alt.Color('result_all',scale=color_scale))
+    # alt.Y('winning'),color=alt.Color('result_all'))
+    # st.write('do the normalised stacked bar chart which shows percentage')
+    # st.altair_chart(chart_power,use_container_width=True)
+
+    normalized_table = graph_factor_table.copy()
+    normalized_table=normalized_table[normalized_table['result_all']!='tie']
+    normalized_table= normalized_table[(normalized_table['total_factor']=='total_turnover') | (normalized_table['total_factor']=='total_season_cover')
+     | (normalized_table['total_factor']=='power_ranking_success?')].copy()
+    chart_power= alt.Chart(normalized_table).mark_bar().encode(alt.X('total_factor:O',axis=alt.Axis(title='factor',labelAngle=0)),
+    alt.Y('winning',stack="normalize"),color=alt.Color('result_all',scale=color_scale))
+    overlay = pd.DataFrame({'winning': [0.5]})
+    vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=2).encode(y='winning:Q')
+    
+    
+    text = alt.Chart(normalized_table).mark_text(dx=-1, dy=+37, color='white').encode(
+    x=alt.X('total_factor:O'),
+    y=alt.Y('winning',stack="normalize"),
+    detail='winning',
+    text=alt.Text('winning:Q', format='.0f'))
+    
+    # chart_power=chart_power+text
+
+    # updated_test_chart = alt.layer(chart_power,vline)
+    updated_test_chart=chart_power+vline+text
+    
+    st.altair_chart(updated_test_chart,use_container_width=True)
