@@ -709,15 +709,17 @@ with st.beta_expander('Analysis of Penalty Factors'):
 
     normalized_table = graph_factor_table.copy()
     normalized_table=normalized_table[normalized_table['result_all_penalty']!='tie']
+    # st.write('normalised table 1', normalized_table)
     normalized_table= normalized_table[(normalized_table['total_factor_penalty']=='total_penalty') | (normalized_table['total_factor_penalty']=='total_season_cover')
      | (normalized_table['total_factor_penalty']=='power_ranking_success?')].copy()
+    # st.write('normalised table 2', normalized_table) 
     chart_power= alt.Chart(normalized_table).mark_bar().encode(alt.X('total_factor_penalty:O',axis=alt.Axis(title='factor',labelAngle=0)),
     alt.Y('winning',stack="normalize"),color=alt.Color('result_all_penalty',scale=color_scale))
     overlay = pd.DataFrame({'winning': [0.5]})
     vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=2).encode(y='winning:Q')
     
     
-    text = alt.Chart(normalized_table).mark_text(dx=-1, dy=+37, color='white').encode(
+    text = alt.Chart(normalized_table).mark_text(dx=-1, dy=+57, color='white').encode(
     x=alt.X('total_factor_penalty:O'),
     y=alt.Y('winning',stack="normalize"),
     detail='winning',
