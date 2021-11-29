@@ -1,205 +1,195 @@
-Week,Date,Home Team,Away Team,Spread,Home Points,Away Points,home_turnovers_won,away_turnovers_won,Turnover,home_penalties_conceded,away_penalties_conceded,penalties_conceded
--3,23-Apr,Ulster,Connacht,-8.5,24,26,0,0,0,0,0,0
--3,24-Apr,Leinster,Munster,-1,3,27,0,0,0,0,0,0
--3,24-Apr,Ospreys,Cardiff Blues,-8.5,36,14,0,0,0,0,0,0
--3,25-Apr,Dragons,Scarlets,5,52,32,0,0,0,0,0,0
--3,07-May,Glasgow Warriors,Edinburgh,-2.5,29,19,0,0,0,0,0,0
--3,07-May,Munster,Ulster,-9.5,38,10,0,0,0,0,0,0
--3,07-May,Zebre,Benetton,3.5,20,25,0,0,0,0,0,0
--3,08-May,Stormers,Bulls,1.5,16,20,0,0,0,0,0,0
--3,08-May,Sharks,Lions,-13.5,34,26,0,0,0,0,0,0
--2,08-May,Connacht,Leinster,9.5,21,50,0,0,0,0,0,0
--2,08-May,Scarlets,Ospreys,-4,22,6,0,0,0,0,0,0
--2,09-May,Cardiff Blues,Dragons,-4.5,17,16,0,0,0,0,0,0
--2,14-May,Leinster,Ulster,-19,21,17,0,0,0,0,0,0
--2,14-May,Munster,Connacht,-17,20,24,0,0,0,0,0,0
--2,15-May,Bulls,Sharks,-1.5,43,9,0,0,0,0,0,0
--2,15-May,Scarlets,Cardiff Blues,-0.5,28,29,0,0,0,0,0,0
--2,15-May,Lions,Stormers,4.5,37,39,0,0,0,0,0,0
--1,15-May,Edinburgh,Glasgow Warriors,-2.5,24,31,0,0,0,0,0,0
--1,15-May,Benetton,Zebre,-13.5,34,27,0,0,0,0,0,0
--1,16-May,Dragons,Ospreys,1.5,26,42,0,0,0,0,0,0
--1,22-May,Lions,Bulls,6.5,34,33,0,0,0,0,0,0
--1,22-May,Sharks,Stormers,-1.5,22,25,0,0,0,0,0,0
--1,28-May,Munster,Cardiff Blues,-12.5,31,27,0,0,0,0,0,0
--1,29-May,Dragons,Glasgow Warriors,3.5,16,27,0,0,0,0,0,0
--1,29-May,Benetton,Connacht,2.5,20,12,0,0,0,0,0,0
-0,04-Jun,Connacht,Ospreys,-4.5,26,19,9,3,-6,17,12,5
-0,04-Jun,Glasgow Warriors,Leinster,10.5,15,12,5,2,-3,6,15,-9
-0,04-Jun,Bulls,Stormers,-5.5,31,27,4,6,2,5,16,-11
-0,05-Jun,Cardiff Blues,Zebre,-16.5,37,12,6,4,-2,6,20,-14
-0,05-Jun,Lions,Sharks,1.5,21,33,6,5,-1,13,15,-2
-0,05-Jun,Edinburgh,Ulster,3.5,31,34,8,3,-5,9,15,-6
-0,11-Jun,Leinster,Dragons,-27.5,38,7,7,9,2,10,10,0
-0,11-Jun,Zebre,Munster,15.5,11,54,2,9,7,13,11,2
-0,12-Jun,Sharks,Bulls,1.5,22,34,6,12,6,16,17,-1
-0,13-Jun,Scarlets,Edinburgh,-5.5,28,28,9,6,-3,9,10,-1
-0,19-Jun,Benetton,Bulls,3.5,35,8,9,5,-4,8,8,0
-1,24-Sep,Zebre,Lions,-1.5,26,38,7,10,3,12,13,-1
-1,24-Sep,Ulster,Glasgow Warriors,-13.5,35,29,3,6,3,8,8,0
-1,24-Sep,Cardiff Blues,Connacht,-6.5,33,21,7,8,1,11,9,2
-1,25-Sep,Benetton,Stormers,-5,22,18,3,9,6,10,11,-1
-1,25-Sep,Leinster,Bulls,-18,31,3,7,3,-4,14,9,5
-1,25-Sep,Edinburgh,Scarlets,-4,26,22,7,5,-2,16,7,9
-1,25-Sep,Munster,Sharks,-21,42,17,2,3,1,7,17,-10
-1,26-Sep,Dragons,Ospreys,0,23,27,6,5,-1,11,12,-1
-2,01-Oct,Connacht,Bulls,-1.5,34,7,8,4,-4,7,11,-4
-2,01-Oct,Scarlets,Lions,-10.5,36,13,8,5,-3,16,9,7
-2,02-Oct,Benetton,Edinburgh,1.5,28,27,2,8,6,13,13,0
-2,02-Oct,Glasgow Warriors,Sharks,-8.5,35,24,5,5,0,13,10,3
-2,02-Oct,Zebre,Ulster,12,3,36,4,6,2,16,6,10
-2,02-Oct,Dragons,Leinster,18.5,6,7,4,6,2,12,11,1
-2,02-Oct,Ospreys,Cardiff Blues,-1,18,14,6,6,0,6,16,-10
-2,02-Oct,Munster,Stormers,-23.5,34,18,3,2,-1,11,10,1
-3,08-Oct,Ulster,Benetton,-14,28,8,4,4,0,12,13,-1
-3,08-Oct,Ospreys,Sharks,-8,13,27,4,4,0,6,7,-1
-3,09-Oct,Leinster,Zebre,-37,43,7,2,6,4,6,9,-3
-3,09-Oct,Glasgow Warriors,Lions,-15,13,9,4,4,0,13,6,7
-3,09-Oct,Connacht,Dragons,-8,22,35,5,8,3,10,14,-4
-3,09-Oct,Edinburgh,Stormers,-10.5,20,20,5,5,0,11,11,0
-3,09-Oct,Cardiff Blues,Bulls,-8.5,19,29,7,4,-3,13,15,-2
-3,10-Oct,Scarlets,Munster,-5.5,13,43,3,7,4,7,14,-7
-4,15-Oct,Ulster,Lions,-20,26,10,1,8,7,7,8,-1
-4,15-Oct,Dragons,Stormers,-3,10,24,1,1,0,12,5,7
-4,16-Oct,Zebre,Glasgow Warriors,11,6,17,5,6,1,14,14,0
-4,16-Oct,Benetton,Ospreys,-4,26,29,1,4,3,10,12,-2
-4,16-Oct,Leinster,Scarlets,-21,50,15,5,4,-1,6,14,-8
-4,16-Oct,Edinburgh,Bulls,-2,17,10,11,4,-7,14,17,-3
-4,16-Oct,Munster,Connacht,-16,20,18,8,5,-3,8,13,-5
-4,16-Oct,Cardiff Blues,Sharks,-6,23,17,11,7,-4,13,9,4
-5,22-Oct,Glasgow Warriors,Leinster,12,0,0,0,0,0,0,0,0
-5,22-Oct,Scarlets,Benetton,-9,0,0,0,0,0,0,0,0
-5,23-Oct,Zebre,Edinburgh,4,0,0,0,0,0,0,0,0
-5,23-Oct,Cardiff Blues,Dragons,-6,0,0,0,0,0,0,0,0
-5,23-Oct,Connacht,Ulster,4,0,0,0,0,0,0,0,0
-5,04-Dec,Lions,Sharks,0,0,0,0,0,0,0,0,0
-5,04-Dec,Stormers,Bulls,0,0,0,0,0,0,0,0,0
-5,23-Oct,Ospreys,Munster,12,0,0,0,0,0,0,0,0
-6,26-Nov,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-6,27-Nov,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-6,27-Nov,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-6,27-Nov,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-6,27-Nov,Bulls,Munster,0,0,0,0,0,0,0,0,0
-6,27-Nov,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-6,27-Nov,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-6,28-Nov,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-7,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-7,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-7,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-7,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-7,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-7,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-7,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-7,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-8,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-8,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-8,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-8,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-8,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-8,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-8,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-8,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-9,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-9,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-9,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-9,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-9,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-9,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-9,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-9,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-10,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-10,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-10,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-10,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-10,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-10,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-10,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-10,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-11,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-11,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-11,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-11,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-11,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-11,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-11,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-11,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-12,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-12,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-12,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-12,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-12,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-12,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-12,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-12,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-13,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-13,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-13,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-13,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-13,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-13,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-13,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-13,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-14,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-14,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-14,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-14,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-14,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-14,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-14,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-14,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-15,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-15,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-15,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-15,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-15,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-15,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-15,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-15,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-16,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-16,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-16,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-16,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-16,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-16,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-16,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-16,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-17,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-17,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-17,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-17,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-17,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-17,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-17,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-17,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-18,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-18,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-18,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-18,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-18,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-18,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-18,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-18,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-19,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-19,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-19,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-19,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-19,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-19,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-19,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-19,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-20,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-20,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-20,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-20,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-20,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-20,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-20,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-20,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
-21,31-Dec,Connacht,Ospreys,0,0,0,0,0,0,0,0,0
-21,31-Dec,Stormers,Zebre,0,0,0,0,0,0,0,0,0
-21,31-Dec,Benetton,Glasgow Warriors,0,0,0,0,0,0,0,0,0
-21,31-Dec,Sharks,Scarlets,0,0,0,0,0,0,0,0,0
-21,31-Dec,Bulls,Munster,0,0,0,0,0,0,0,0,0
-21,31-Dec,Dragons,Edinburgh,0,0,0,0,0,0,0,0,0
-21,31-Dec,Leinster,Ulster,0,0,0,0,0,0,0,0,0
-21,31-Dec,Lions,Cardiff Blues,0,0,0,0,0,0,0,0,0
+,Week,Date,Home Team,Away Team,Spread,Home Points,Away Points,home_turnovers_won,away_turnovers_won,Turnover,home_penalties_conceded,away_penalties_conceded,penalties_conceded
+0,-3,2021-04-23,Ulster,Connacht,-8.5,24.0,26.0,0.0,0.0,0.0,0.0,0.0,0.0
+1,-3,2021-04-24,Leinster,Munster,-1.0,3.0,27.0,0.0,0.0,0.0,0.0,0.0,0.0
+2,-3,2021-04-24,Ospreys,Cardiff Blues,-8.5,36.0,14.0,0.0,0.0,0.0,0.0,0.0,0.0
+3,-3,2021-04-25,Dragons,Scarlets,5.0,52.0,32.0,0.0,0.0,0.0,0.0,0.0,0.0
+4,-3,2021-05-07,Glasgow Warriors,Edinburgh,-2.5,29.0,19.0,0.0,0.0,0.0,0.0,0.0,0.0
+5,-3,2021-05-07,Munster,Ulster,-9.5,38.0,10.0,0.0,0.0,0.0,0.0,0.0,0.0
+6,-3,2021-05-07,Zebre,Benetton,3.5,20.0,25.0,0.0,0.0,0.0,0.0,0.0,0.0
+7,-3,2021-05-08,Stormers,Bulls,1.5,16.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0
+8,-3,2021-05-08,Sharks,Lions,-13.5,34.0,26.0,0.0,0.0,0.0,0.0,0.0,0.0
+9,-2,2021-05-08,Connacht,Leinster,9.5,21.0,50.0,0.0,0.0,0.0,0.0,0.0,0.0
+10,-2,2021-05-08,Scarlets,Ospreys,-4.0,22.0,6.0,0.0,0.0,0.0,0.0,0.0,0.0
+11,-2,2021-05-09,Cardiff Blues,Dragons,-4.5,17.0,16.0,0.0,0.0,0.0,0.0,0.0,0.0
+12,-2,2021-05-14,Leinster,Ulster,-19.0,21.0,17.0,0.0,0.0,0.0,0.0,0.0,0.0
+13,-2,2021-05-14,Munster,Connacht,-17.0,20.0,24.0,0.0,0.0,0.0,0.0,0.0,0.0
+14,-2,2021-05-15,Bulls,Sharks,-1.5,43.0,9.0,0.0,0.0,0.0,0.0,0.0,0.0
+15,-2,2021-05-15,Scarlets,Cardiff Blues,-0.5,28.0,29.0,0.0,0.0,0.0,0.0,0.0,0.0
+16,-2,2021-05-15,Lions,Stormers,4.5,37.0,39.0,0.0,0.0,0.0,0.0,0.0,0.0
+17,-1,2021-05-15,Edinburgh,Glasgow Warriors,-2.5,24.0,31.0,0.0,0.0,0.0,0.0,0.0,0.0
+18,-1,2021-05-15,Benetton,Zebre,-13.5,34.0,27.0,0.0,0.0,0.0,0.0,0.0,0.0
+19,-1,2021-05-16,Dragons,Ospreys,1.5,26.0,42.0,0.0,0.0,0.0,0.0,0.0,0.0
+20,-1,2021-05-22,Lions,Bulls,6.5,34.0,33.0,0.0,0.0,0.0,0.0,0.0,0.0
+21,-1,2021-05-22,Sharks,Stormers,-1.5,22.0,25.0,0.0,0.0,0.0,0.0,0.0,0.0
+22,-1,2021-05-28,Munster,Cardiff Blues,-12.5,31.0,27.0,0.0,0.0,0.0,0.0,0.0,0.0
+23,-1,2021-05-29,Dragons,Glasgow Warriors,3.5,16.0,27.0,0.0,0.0,0.0,0.0,0.0,0.0
+24,-1,2021-05-29,Benetton,Connacht,2.5,20.0,12.0,0.0,0.0,0.0,0.0,0.0,0.0
+25,0,2021-06-04,Connacht,Ospreys,-4.5,26.0,19.0,9.0,3.0,-6.0,17.0,12.0,5.0
+26,0,2021-06-04,Glasgow Warriors,Leinster,10.5,15.0,12.0,5.0,2.0,-3.0,6.0,15.0,-9.0
+27,0,2021-06-04,Bulls,Stormers,-5.5,31.0,27.0,4.0,6.0,2.0,5.0,16.0,-11.0
+28,0,2021-06-05,Cardiff Blues,Zebre,-16.5,37.0,12.0,6.0,4.0,-2.0,6.0,20.0,-14.0
+29,0,2021-06-05,Lions,Sharks,1.5,21.0,33.0,6.0,5.0,-1.0,13.0,15.0,-2.0
+30,0,2021-06-05,Edinburgh,Ulster,3.5,31.0,34.0,8.0,3.0,-5.0,9.0,15.0,-6.0
+31,0,2021-06-11,Leinster,Dragons,-27.5,38.0,7.0,7.0,9.0,2.0,10.0,10.0,0.0
+32,0,2021-06-11,Zebre,Munster,15.5,11.0,54.0,2.0,9.0,7.0,13.0,11.0,2.0
+33,0,2021-06-12,Sharks,Bulls,1.5,22.0,34.0,6.0,12.0,6.0,16.0,17.0,-1.0
+34,0,2021-06-13,Scarlets,Edinburgh,-5.5,28.0,28.0,9.0,6.0,-3.0,9.0,10.0,-1.0
+35,0,2021-06-19,Benetton,Bulls,3.5,35.0,8.0,9.0,5.0,-4.0,8.0,8.0,0.0
+36,1,2021-09-24,Zebre,Lions,-1.5,26.0,38.0,7.0,10.0,3.0,12.0,13.0,-1.0
+37,1,2021-09-24,Ulster,Glasgow Warriors,-13.5,35.0,29.0,3.0,6.0,3.0,8.0,8.0,0.0
+38,1,2021-09-24,Cardiff Blues,Connacht,-6.5,33.0,21.0,7.0,8.0,1.0,11.0,9.0,2.0
+39,1,2021-09-25,Benetton,Stormers,-5.0,22.0,18.0,3.0,9.0,6.0,10.0,11.0,-1.0
+40,1,2021-09-25,Leinster,Bulls,-18.0,31.0,3.0,7.0,3.0,-4.0,14.0,9.0,5.0
+41,1,2021-09-25,Edinburgh,Scarlets,-4.0,26.0,22.0,7.0,5.0,-2.0,16.0,7.0,9.0
+42,1,2021-09-25,Munster,Sharks,-21.0,42.0,17.0,2.0,3.0,1.0,7.0,17.0,-10.0
+43,1,2021-09-26,Dragons,Ospreys,0.0,23.0,27.0,6.0,5.0,-1.0,11.0,12.0,-1.0
+44,2,2021-10-01,Connacht,Bulls,-1.5,34.0,7.0,8.0,4.0,-4.0,7.0,11.0,-4.0
+45,2,2021-10-01,Scarlets,Lions,-10.5,36.0,13.0,8.0,5.0,-3.0,16.0,9.0,7.0
+46,2,2021-10-02,Benetton,Edinburgh,1.5,28.0,27.0,2.0,8.0,6.0,13.0,13.0,0.0
+47,2,2021-10-02,Glasgow Warriors,Sharks,-8.5,35.0,24.0,5.0,5.0,0.0,13.0,10.0,3.0
+48,2,2021-10-02,Zebre,Ulster,12.0,3.0,36.0,4.0,6.0,2.0,16.0,6.0,10.0
+49,2,2021-10-02,Dragons,Leinster,18.5,6.0,7.0,4.0,6.0,2.0,12.0,11.0,1.0
+50,2,2021-10-02,Ospreys,Cardiff Blues,-1.0,18.0,14.0,6.0,6.0,0.0,6.0,16.0,-10.0
+51,2,2021-10-02,Munster,Stormers,-23.5,34.0,18.0,3.0,2.0,-1.0,11.0,10.0,1.0
+52,3,2021-10-08,Ulster,Benetton,-14.0,28.0,8.0,4.0,4.0,0.0,12.0,13.0,-1.0
+53,3,2021-10-08,Ospreys,Sharks,-8.0,13.0,27.0,4.0,4.0,0.0,6.0,7.0,-1.0
+54,3,2021-10-09,Leinster,Zebre,-37.0,43.0,7.0,2.0,6.0,4.0,6.0,9.0,-3.0
+55,3,2021-10-09,Glasgow Warriors,Lions,-15.0,13.0,9.0,4.0,4.0,0.0,13.0,6.0,7.0
+56,3,2021-10-09,Connacht,Dragons,-8.0,22.0,35.0,5.0,8.0,3.0,10.0,14.0,-4.0
+57,3,2021-10-09,Edinburgh,Stormers,-10.5,20.0,20.0,5.0,5.0,0.0,11.0,11.0,0.0
+58,3,2021-10-09,Cardiff Blues,Bulls,-8.5,19.0,29.0,7.0,4.0,-3.0,13.0,15.0,-2.0
+59,3,2021-10-10,Scarlets,Munster,-5.5,13.0,43.0,3.0,7.0,4.0,7.0,14.0,-7.0
+60,4,2021-10-15,Ulster,Lions,-20.0,26.0,10.0,1.0,8.0,7.0,7.0,8.0,-1.0
+61,4,2021-10-15,Dragons,Stormers,-3.0,10.0,24.0,1.0,1.0,0.0,12.0,5.0,7.0
+62,4,2021-10-16,Zebre,Glasgow Warriors,11.0,6.0,17.0,5.0,6.0,1.0,14.0,14.0,0.0
+63,4,2021-10-16,Benetton,Ospreys,-4.0,26.0,29.0,1.0,4.0,3.0,10.0,12.0,-2.0
+64,4,2021-10-16,Leinster,Scarlets,-21.0,50.0,15.0,5.0,4.0,-1.0,6.0,14.0,-8.0
+65,4,2021-10-16,Edinburgh,Bulls,-2.0,17.0,10.0,11.0,4.0,-7.0,14.0,17.0,-3.0
+66,4,2021-10-16,Munster,Connacht,-16.0,20.0,18.0,8.0,5.0,-3.0,8.0,13.0,-5.0
+67,4,2021-10-16,Cardiff Blues,Sharks,-6.0,23.0,17.0,11.0,7.0,-4.0,13.0,9.0,4.0
+68,5,2021-10-22,Glasgow Warriors,Leinster,14.0,15.0,31.0,3.0,9.0,6.0,9.0,13.0,-4.0
+69,5,2021-10-22,Scarlets,Benetton,-4.0,34.0,28.0,8.0,3.0,-5.0,8.0,8.0,0.0
+70,5,2021-10-23,Zebre,Edinburgh,8.0,10.0,27.0,8.0,5.0,-3.0,12.0,8.0,4.0
+71,5,2021-10-23,Cardiff Blues,Dragons,-8.0,31.0,29.0,8.0,9.0,1.0,14.0,17.0,-3.0
+72,5,2021-10-23,Connacht,Ulster,5.0,36.0,11.0,10.0,6.0,-4.0,15.0,12.0,3.0
+73,5,2021-10-23,Ospreys,Munster,11.0,18.0,10.0,6.0,7.0,1.0,10.0,12.0,-2.0
+74,6,2021-11-26,Connacht,Ospreys,-6.5,46.0,18.0,10.0,7.0,-3.0,11.0,9.0,2.0
+75,6,2021-11-27,Benetton,Glasgow Warriors,3.5,19.0,18.0,4.0,4.0,0.0,10.0,12.0,-2.0
+76,6,2021-11-27,Dragons,Edinburgh,-2.5,14.0,30.0,3.0,8.0,5.0,16.0,5.0,11.0
+77,6,2021-11-27,Leinster,Ulster,-13.0,10.0,20.0,7.0,7.0,0.0,15.0,11.0,4.0
+78,7,2021-12-03,Edinburgh,Benetton,-12.0,,,,,,,,
+79,7,2021-12-03,Glasgow Warriors,Dragons,-10.0,,,,,,,,
+80,7,2021-12-04,Ospreys,Ulster,7.0,,,,,,,,
+81,7,2021-12-04,Leinster,Connacht,-17.0,,,,,,,,
+82,8,2021-12-31,Connacht,Ospreys,,,,,,,,,
+83,8,2021-12-31,Stormers,Zebre,,,,,,,,,
+84,8,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+85,8,2021-12-31,Sharks,Scarlets,,,,,,,,,
+86,8,2021-12-31,Bulls,Munster,,,,,,,,,
+87,8,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+88,8,2021-12-31,Leinster,Ulster,,,,,,,,,
+89,8,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+90,9,2021-12-31,Connacht,Ospreys,,,,,,,,,
+91,9,2021-12-31,Stormers,Zebre,,,,,,,,,
+92,9,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+93,9,2021-12-31,Sharks,Scarlets,,,,,,,,,
+94,9,2021-12-31,Bulls,Munster,,,,,,,,,
+95,9,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+96,9,2021-12-31,Leinster,Ulster,,,,,,,,,
+97,9,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+98,10,2021-12-31,Connacht,Ospreys,,,,,,,,,
+99,10,2021-12-31,Stormers,Zebre,,,,,,,,,
+100,10,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+101,10,2021-12-31,Sharks,Scarlets,,,,,,,,,
+102,10,2021-12-31,Bulls,Munster,,,,,,,,,
+103,10,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+104,10,2021-12-31,Leinster,Ulster,,,,,,,,,
+105,10,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+106,11,2021-12-31,Connacht,Ospreys,,,,,,,,,
+107,11,2021-12-31,Stormers,Zebre,,,,,,,,,
+108,11,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+109,11,2021-12-31,Sharks,Scarlets,,,,,,,,,
+110,11,2021-12-31,Bulls,Munster,,,,,,,,,
+111,11,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+112,11,2021-12-31,Leinster,Ulster,,,,,,,,,
+113,11,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+114,12,2021-12-31,Connacht,Ospreys,,,,,,,,,
+115,12,2021-12-31,Stormers,Zebre,,,,,,,,,
+116,12,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+117,12,2021-12-31,Sharks,Scarlets,,,,,,,,,
+118,12,2021-12-31,Bulls,Munster,,,,,,,,,
+119,12,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+120,12,2021-12-31,Leinster,Ulster,,,,,,,,,
+121,12,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+122,13,2021-12-31,Connacht,Ospreys,,,,,,,,,
+123,13,2021-12-31,Stormers,Zebre,,,,,,,,,
+124,13,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+125,13,2021-12-31,Sharks,Scarlets,,,,,,,,,
+126,13,2021-12-31,Bulls,Munster,,,,,,,,,
+127,13,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+128,13,2021-12-31,Leinster,Ulster,,,,,,,,,
+129,13,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+130,14,2021-12-31,Connacht,Ospreys,,,,,,,,,
+131,14,2021-12-31,Stormers,Zebre,,,,,,,,,
+132,14,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+133,14,2021-12-31,Sharks,Scarlets,,,,,,,,,
+134,14,2021-12-31,Bulls,Munster,,,,,,,,,
+135,14,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+136,14,2021-12-31,Leinster,Ulster,,,,,,,,,
+137,14,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+138,15,2021-12-31,Connacht,Ospreys,,,,,,,,,
+139,15,2021-12-31,Stormers,Zebre,,,,,,,,,
+140,15,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+141,15,2021-12-31,Sharks,Scarlets,,,,,,,,,
+142,15,2021-12-31,Bulls,Munster,,,,,,,,,
+143,15,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+144,15,2021-12-31,Leinster,Ulster,,,,,,,,,
+145,15,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+146,16,2021-12-31,Connacht,Ospreys,,,,,,,,,
+147,16,2021-12-31,Stormers,Zebre,,,,,,,,,
+148,16,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+149,16,2021-12-31,Sharks,Scarlets,,,,,,,,,
+150,16,2021-12-31,Bulls,Munster,,,,,,,,,
+151,16,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+152,16,2021-12-31,Leinster,Ulster,,,,,,,,,
+153,16,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+154,17,2021-12-31,Connacht,Ospreys,,,,,,,,,
+155,17,2021-12-31,Stormers,Zebre,,,,,,,,,
+156,17,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+157,17,2021-12-31,Sharks,Scarlets,,,,,,,,,
+158,17,2021-12-31,Bulls,Munster,,,,,,,,,
+159,17,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+160,17,2021-12-31,Leinster,Ulster,,,,,,,,,
+161,17,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+162,18,2021-12-31,Connacht,Ospreys,,,,,,,,,
+163,18,2021-12-31,Stormers,Zebre,,,,,,,,,
+164,18,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+165,18,2021-12-31,Sharks,Scarlets,,,,,,,,,
+166,18,2021-12-31,Bulls,Munster,,,,,,,,,
+167,18,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+168,18,2021-12-31,Leinster,Ulster,,,,,,,,,
+169,18,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+170,19,2021-12-31,Connacht,Ospreys,,,,,,,,,
+171,19,2021-12-31,Stormers,Zebre,,,,,,,,,
+172,19,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+173,19,2021-12-31,Sharks,Scarlets,,,,,,,,,
+174,19,2021-12-31,Bulls,Munster,,,,,,,,,
+175,19,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+176,19,2021-12-31,Leinster,Ulster,,,,,,,,,
+177,19,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+178,20,2021-12-31,Connacht,Ospreys,,,,,,,,,
+179,20,2021-12-31,Stormers,Zebre,,,,,,,,,
+180,20,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+181,20,2021-12-31,Sharks,Scarlets,,,,,,,,,
+182,20,2021-12-31,Bulls,Munster,,,,,,,,,
+183,20,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+184,20,2021-12-31,Leinster,Ulster,,,,,,,,,
+185,20,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
+186,21,2021-12-31,Connacht,Ospreys,,,,,,,,,
+187,21,2021-12-31,Stormers,Zebre,,,,,,,,,
+188,21,2021-12-31,Benetton,Glasgow Warriors,,,,,,,,,
+189,21,2021-12-31,Sharks,Scarlets,,,,,,,,,
+190,21,2021-12-31,Bulls,Munster,,,,,,,,,
+191,21,2021-12-31,Dragons,Edinburgh,,,,,,,,,
+192,21,2021-12-31,Leinster,Ulster,,,,,,,,,
+193,21,2021-12-31,Lions,Cardiff Blues,,,,,,,,,
