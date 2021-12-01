@@ -11,18 +11,19 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-finished_week=5
+finished_week=6
 
-url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
-# url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
+# url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
+url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-csv_save(results_excel)
+# csv_save(results_excel)
 
-data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+# data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+data=pd.read_csv(url,parse_dates=['Date'])
 
 # data['Date']=pd.to_datetime(data['Date'],errors='coerce')
 data['year']=data['Date'].dt.year
@@ -35,8 +36,8 @@ data['Date']=pd.to_datetime(data[['year','month','day']])
 # data=pd.read_excel(url,sheet_name='data')
 # st.write(data)
 
-team_names_id=pd.read_excel(url,sheet_name='ID')
-# team_names_id=pd.read_csv('https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_id.csv')
+# team_names_id=pd.read_excel(url,sheet_name='ID')
+team_names_id=pd.read_csv('https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_id.csv')
 
 
 fb_ref_2020=pd.merge(data,team_names_id,on='Home Team').rename(columns={'ID':'Home ID'})
