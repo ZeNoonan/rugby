@@ -16,7 +16,7 @@ finished_week=6
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
-results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+# results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
