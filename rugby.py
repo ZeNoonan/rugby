@@ -16,11 +16,11 @@ finished_week=7
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
-# results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-# csv_save(results_excel)
+csv_save(results_excel)
 
 # data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
 data=pd.read_csv(url,parse_dates=['Date'])
@@ -620,14 +620,21 @@ with st.expander('Analysis of Factors'):
     total_factor_table = total_factor_table[ cols_to_move + [ col for col in total_factor_table if col not in cols_to_move ] ]
     total_factor_table=total_factor_table.loc[:,['total_turnover','total_season_cover','power_ranking_success?']]
     # st.write(total_factor_table.dtypes)
-    st.write(total_factor_table)
+
+    total_factor_table_presentation = total_factor_table.style.format("{:.0f}", na_rep='-')
+    total_factor_table_presentation = total_factor_table_presentation.format(formatter="{:.1%}", subset=pd.IndexSlice[['% Winning'], :])
+
+    st.write(total_factor_table_presentation)
     factor_bets = (analysis_factors[analysis_factors['bet_sign']!=0]).copy()
     bets_made_factor_table = analysis_factor_function(factor_bets)
     # cols_to_move=['total_turnover','total_season_cover','power_ranking_success?']
     bets_made_factor_table = bets_made_factor_table[ cols_to_move + [ col for col in bets_made_factor_table if col not in cols_to_move ] ]
     bets_made_factor_table=bets_made_factor_table.loc[:,['total_turnover','total_season_cover','power_ranking_success?']]
+
+    bets_made_factor_table_presentation = bets_made_factor_table.style.format("{:.0f}", na_rep='-')
+    bets_made_factor_table_presentation = bets_made_factor_table_presentation.format(formatter="{:.1%}", subset=pd.IndexSlice[['% Winning'], :])
     st.write('This is the matches BET ON broken down by Factor result')
-    st.write(bets_made_factor_table)
+    st.write(bets_made_factor_table_presentation)
 
     # st.write('graph work below')
     # graph_factor_table = total_factor_table.copy().loc[[-1,0,1],:].reset_index().rename(columns={'index':'result_all'})
@@ -678,6 +685,9 @@ with st.expander('Analysis of Factors'):
     # reset_data.loc['% Winning'] = ((reset_data.loc[1] / reset_data.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
     reset_data.loc['% Winning'] = ((reset_data.loc['1'] / reset_data.loc['No. of Bets Made'])*100)
     st.write('This shows the betting result')
+    
+    reset_data = reset_data.style.format("{:.0f}", na_rep='-')
+    reset_data = reset_data.format(formatter="{:.1%}", subset=pd.IndexSlice[['% Winning'], :])
     st.write(reset_data)
     st.write('Broken down by the number of factors indicating the strength of the signal')
 
