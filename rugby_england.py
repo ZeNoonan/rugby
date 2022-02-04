@@ -6,13 +6,13 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=13
+finished_week=14
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_premiership.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_england_id.xlsx')
 
 def csv_save(x):
-    x.to_csv('C:/Users/Darragh/Documents/Python/nrl/rugby_england_data.csv')
+    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_england_data.csv')
     return x
 csv_save(results_excel)
 
@@ -28,7 +28,7 @@ def read_csv_data_date(file):
 
 
 # url = read_csv_data('https://raw.githubusercontent.com/ZeNoonan/nrl/main/nrl_data.csv').copy()
-url = 'https://raw.githubusercontent.com/ZeNoonan/nrl/main/nrl_data.csv'
+# url = 'https://raw.githubusercontent.com/ZeNoonan/nrl/main/nrl_data.csv'
 # https://www.aussportsbetting.com/data/historical-nfl-results-and-odds-data/
 # team_names_id = read_csv_data('https://raw.githubusercontent.com/ZeNoonan/nrl/main/nrl_team_id.csv').copy()
 # team_names_id = (read_csv_data('C:/Users/Darragh/Documents/Python/nrl/nrl_team_id.csv')).drop(['Unnamed: 0'],axis=1).copy()
@@ -37,7 +37,7 @@ team_names_id = id_excel
 # st.write(pd.read_csv(url))
 # data=pd.read_csv(url,parse_dates=['Date'])
 
-local='C:/Users/Darragh/Documents/Python/nrl/rugby_england_data.csv'
+local='C:/Users/Darragh/Documents/Python/rugby/rugby_england_data.csv'
 
 # data=pd.read_csv(local,parse_dates=['Date'])
 data=(read_csv_data_date(local)).copy()
@@ -116,6 +116,7 @@ def penalty_workings(data,week_start):
     return season_cover.sort_values(by=['Week','Date','ID'],ascending=['True','True','True'])
 
 def penalty_2(season_cover_df):    
+    # sourcery skip: inline-immediately-returned-variable
     # https://stackoverflow.com/questions/53335567/use-pandas-shift-within-a-group
     # st.write('before line in function', season_cover_df)
     season_cover_df['prev_penalty']=season_cover_df.groupby('ID')['penalty_sign'].shift()
@@ -206,7 +207,7 @@ first_qtr=matrix_df_1.copy()
 start=-3
 finish=0
 first_4=first_qtr[first_qtr['Week'].between(start,finish)].copy()
-def games_matrix_workings(first_4):
+def games_matrix_workings(first_4):  # sourcery skip: remove-unreachable-code
     group_week = first_4.groupby('Week')
     raw_data_2=[]
     game_weights = iter([-0.125, -0.25,-0.5,-1])
@@ -252,6 +253,7 @@ def test_4(matrix_df_1):
 
 # with st.beta_expander('CORRECT Power Ranking to be used in Matrix Multiplication'):
     # # https://stackoverflow.com/questions/9621362/how-do-i-compute-a-weighted-moving-average-using-pandas
+# sourcery skip: remove-zero-from-range
 grouped = test_df_2.groupby('ID')
 # https://stackoverflow.com/questions/16974047/efficient-way-to-find-missing-elements-in-an-integer-sequence
 # https://stackoverflow.com/questions/62471485/is-it-possible-to-insert-missing-sequence-numbers-in-python
@@ -277,6 +279,7 @@ inverse_matrix=[]
 power_ranking=[]
 list_inverse_matrix=[]
 list_power_ranking=[]
+# st.write('check this',df_power)
 power_df=df_power.loc[:,['Week','ID','adj_spread']].copy()
 games_df=matrix_df_1.copy()
 first=list(range(-3,18))
