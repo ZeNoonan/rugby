@@ -16,14 +16,14 @@ finished_week=8
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
-# results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-# csv_save(results_excel)
+csv_save(results_excel)
 
-# data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
-data=pd.read_csv(url,parse_dates=['Date'])
+data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+# data=pd.read_csv(url,parse_dates=['Date'])
 
 # data['Date']=pd.to_datetime(data['Date'],errors='coerce')
 data['year']=data['Date'].dt.year
@@ -76,7 +76,7 @@ def turnover_workings(data,week_start):
     season_cover=pd.concat([home_turnover_df,away_turnover_df],ignore_index=True)
     # season_cover_df = pd.melt(season_cover_df,id_vars=['Week', 'home_cover'],value_vars=['Home ID', 'Away ID']).set_index('Week').rename(columns={'value':'ID'}).\
     # drop('variable',axis=1).reset_index().sort_values(by=['Week','ID'],ascending=True)
-    return season_cover.sort_values(by=['Week','Date','ID'],ascending=['True','True','True'])
+    return season_cover.sort_values(by=['Week','Date','ID'],ascending=[True,True,True])
 
 def turnover_2(season_cover_df):    
     # https://stackoverflow.com/questions/53335567/use-pandas-shift-within-a-group
@@ -100,7 +100,7 @@ def penalty_workings(data,week_start):
     season_cover=pd.concat([home_turnover_df,away_turnover_df],ignore_index=True)
     # season_cover_df = pd.melt(season_cover_df,id_vars=['Week', 'home_cover'],value_vars=['Home ID', 'Away ID']).set_index('Week').rename(columns={'value':'ID'}).\
     # drop('variable',axis=1).reset_index().sort_values(by=['Week','ID'],ascending=True)
-    return season_cover.sort_values(by=['Week','Date','ID'],ascending=['True','True','True'])
+    return season_cover.sort_values(by=['Week','Date','ID'],ascending=[True,True,True])
 
 def penalty_2(season_cover_df):    
     # https://stackoverflow.com/questions/53335567/use-pandas-shift-within-a-group
@@ -134,7 +134,7 @@ def season_cover_workings(data,home,away,name,week_start):
     season_cover=pd.concat([home_cover_df,away_cover_df],ignore_index=True)
     # season_cover_df = pd.melt(season_cover_df,id_vars=['Week', 'home_cover'],value_vars=['Home ID', 'Away ID']).set_index('Week').rename(columns={'value':'ID'}).\
     # drop('variable',axis=1).reset_index().sort_values(by=['Week','ID'],ascending=True)
-    return season_cover.sort_values(by=['Week','Date','ID'],ascending=['True','True','True'])
+    return season_cover.sort_values(by=['Week','Date','ID'],ascending=[True,True,True])
 
 def season_cover_2(season_cover_df,column_name):    
     # https://stackoverflow.com/questions/54993050/pandas-groupby-shift-and-cumulative-sum
