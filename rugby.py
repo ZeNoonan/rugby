@@ -16,14 +16,14 @@ finished_week=10
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
-results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+# results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-csv_save(results_excel)
+# csv_save(results_excel)
 
-data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
-# data=pd.read_csv(url,parse_dates=['Date'])
+# data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+data=pd.read_csv(url,parse_dates=['Date'])
 
 # data['Date']=pd.to_datetime(data['Date'],errors='coerce')
 data['year']=data['Date'].dt.year
