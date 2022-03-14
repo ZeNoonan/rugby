@@ -6,7 +6,7 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=1
+finished_week=2
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
@@ -614,9 +614,11 @@ with st.expander('Analysis of Factors'):
         # st.write('latest', df_table_1.shape)
         if df_table_1.shape > (2,7):
             # st.write('Returning df with analysis')
-            # df_table_1.loc['No. of Bets Made'] = df_table_1.loc[[1,-1]].sum() # No losing bets so far!!!
+            # st.write('Update below table when winning bet returns')
+            # df_table_1.loc['No. of Bets Made'] = df_table_1.loc[['-1']].sum() # No winning bets so far!!!
             df_table_1.loc['No. of Bets Made'] = df_table_1.loc[['1','-1']].sum() # No losing bets so far!!!
             # df_table_1.loc['% Winning'] = ((df_table_1.loc[1] / df_table_1.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
+
             df_table_1.loc['% Winning'] = ((df_table_1.loc['1'] / df_table_1.loc['No. of Bets Made']))
         else:
             # st.write('Returning df with no analysis')
