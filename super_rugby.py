@@ -6,7 +6,9 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=2
+finished_week=3
+
+# All bets made for super rugby
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
@@ -586,6 +588,7 @@ with st.expander('Analysis of Factors'):
 
     # st.write('check for penalties', analysis_factors)
     def analysis_factor_function(analysis_factors,option_1='home_turnover_sign',option_2='away_turnover_sign'):
+        # sourcery skip: remove-unnecessary-else, swap-if-else-branches
         analysis_factors.loc[:,['home_turnover_success?']] = analysis_factors['home_turnover_sign'] * analysis_factors['home_cover_result']
         analysis_factors.loc[:,['away_turnover_success?']] = analysis_factors['away_turnover_sign'] * analysis_factors['home_cover_result']
         analysis_factors.loc[:,['home_cover_season_success?']] = analysis_factors['home_cover_sign'] * analysis_factors['home_cover_result']  
