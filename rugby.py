@@ -11,7 +11,9 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-finished_week=12
+finished_week=14
+
+# just backed Scarlets, need to back Zebre play on Sat and Cardiff on Sun low on funds in bet365 or use betfair
 
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'

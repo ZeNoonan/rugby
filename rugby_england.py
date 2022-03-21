@@ -6,7 +6,7 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=17
+finished_week=19
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_premiership.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_england_id.xlsx')
