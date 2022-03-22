@@ -1,31 +1,28 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-# from io import BytesIO
-# import os
-# import base64 
 import altair as alt
 import datetime as dt
-# from st_aggrid import AgGrid
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
 
-finished_week=14
+finished_week=13
 
-# just backed Scarlets, need to back Zebre play on Sat and Cardiff on Sun low on funds in bet365 or use betfair
+placeholder_1=st.empty()
+placeholder_2=st.empty()
 
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
-results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+# results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-csv_save(results_excel)
+# csv_save(results_excel)
 
-data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
-# data=pd.read_csv(url,parse_dates=['Date'])
+# data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+data=pd.read_csv(url,parse_dates=['Date'])
 
 # data['Date']=pd.to_datetime(data['Date'],errors='coerce')
 data['year']=data['Date'].dt.year
@@ -357,7 +354,7 @@ with st.expander('Penalty Factor by Match Graph'):
 
     # updated_df=penalty_df
 
-with st.expander('Betting Slip Matches'):
+with placeholder_2.expander('Betting Slip Matches'):
     # betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
     # 'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign','home_penalty_sign','away_penalty_sign',
     # 'home_cover_sign','away_cover_sign','power_pick','home_cover_result']]
@@ -610,7 +607,7 @@ with st.expander('Analysis of Factors'):
             # df_table_1.loc['No. of Bets Made'] = df_table_1.loc[[1,-1]].sum() # No losing bets so far!!!
             df_table_1.loc['No. of Bets Made'] = df_table_1.loc[['1','-1']].sum() # No losing bets so far!!!
             # df_table_1.loc['% Winning'] = ((df_table_1.loc[1] / df_table_1.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
-            df_table_1.loc['% Winning'] = ((df_table_1.loc['1'] / df_table_1.loc['No. of Bets Made'])*100)
+            df_table_1.loc['% Winning'] = ((df_table_1.loc['1'] / df_table_1.loc['No. of Bets Made']))
         else:
             # st.write('Returning df with no analysis')
             return df_table_1
@@ -679,13 +676,13 @@ with st.expander('Analysis of Factors'):
     reset_data=reset_data.pivot(index='result_all',columns='total_factor',values='winning').fillna(0)
     reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
     reset_data=reset_data.sort_values(by='betting_factor_total',ascending=False)
-    st.write('working???',reset_data)
+    # st.write('working???',reset_data)
     reset_data.loc['Total']=reset_data.sum()
     # reset_data.loc['No. of Bets Made'] = reset_data.loc[[1,-1]].sum()
     reset_data.loc['No. of Bets Made'] = reset_data.loc[['1','-1']].sum()
     reset_data=reset_data.apply(pd.to_numeric, downcast='integer')
     # reset_data.loc['% Winning'] = ((reset_data.loc[1] / reset_data.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
-    reset_data.loc['% Winning'] = ((reset_data.loc['1'] / reset_data.loc['No. of Bets Made'])*100)
+    reset_data.loc['% Winning'] = ((reset_data.loc['1'] / reset_data.loc['No. of Bets Made']))
     st.write('This shows the betting result')
     
     reset_data = reset_data.style.format("{:.0f}", na_rep='-')
@@ -782,6 +779,125 @@ with st.expander('Analysis of Factors'):
 #     updated_test_chart=chart_power+vline+text
     
 #     st.altair_chart(updated_test_chart,use_container_width=True)
+
+with placeholder_1.expander('Weekly Results'):
+    weekly_results=analysis.groupby(['Week','result']).agg(winning=('result','sum'),count=('result','count'))
+    weekly_test=analysis[analysis['total_factor'].abs()>2].loc[:,['Week','result']].copy()
+    df9 = weekly_test.groupby(['result','Week']).size().unstack(fill_value=0)
+    df9=df9.reset_index()
+    df9['result']=df9['result'].round(1).astype(str)
+    df9=df9.set_index('result').sort_index(ascending=False)
+    df9['grand_total']=df9.sum(axis=1)
+    df9.loc['Winning_Bets']=(df9.loc['1.0'])
+    df9.loc['Losing_Bets']=(df9.loc['-1.0'])
+    df9.loc['No. of Bets Made'] = df9.loc['1.0']+ df9.loc['-1.0']
+    df9.loc['PL_Bets']=df9.loc['Winning_Bets'] - df9.loc['Losing_Bets']
+    df9=df9.apply(pd.to_numeric, downcast='float')
+    graph_pl_data=df9.loc[['PL_Bets'],:].drop('grand_total',axis=1)
+    graph_pl_data=graph_pl_data.stack().reset_index().drop('result',axis=1).rename(columns={0:'week_result'})
+    graph_pl_data['Week']=graph_pl_data['Week'].astype(int)
+    graph_pl_data['total_result']=graph_pl_data['week_result'].cumsum()
+    graph_pl_data=graph_pl_data.melt(id_vars='Week',var_name='category',value_name='result')
+    df9.loc['% Winning'] = ((df9.loc['1.0']) / (df9.loc['1.0'] + df9.loc['-1.0']) ).replace({'<NA>':np.NaN})
+    table_test=df9.copy()
+    # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
+    df9 = df9.style.format("{:.1f}", na_rep='-')
+    df9 = df9.format(formatter="{:.0%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
+        .format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
+        # .format(formatter="{:.0f}", subset=pd.IndexSlice[['-0.0'], :]) \
+
+    def graph_pl(decile_df_abs_home_1,column):
+        line_cover= alt.Chart(decile_df_abs_home_1).mark_line().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
+        alt.Y(column),color=alt.Color('category'))
+        text_cover=line_cover.mark_text(baseline='middle',dx=0,dy=-15).encode(text=alt.Text(column),color=alt.value('black'))
+        overlay = pd.DataFrame({column: [0]})
+        vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=1).encode(y=column)
+        return st.altair_chart(line_cover + text_cover + vline,use_container_width=True)
+
+    graph_pl(graph_pl_data,column='result')
+
+    st.write('Total betting result per Betting Table',betting_matches['result'].sum())
+    st.write('Total betting result per Above Table',table_test.loc['PL_Bets','grand_total'])
+    st.write(df9)
+
+with st.expander('Deep Dive on Power Factor'):
+    power_factor_analysis = analysis_factors.copy()
+    power_factor_analysis['power_ranking_success?'] = power_factor_analysis['power_pick'] * power_factor_analysis['home_cover_result']
+    power_factor_analysis['home_power_less_away'] = power_factor_analysis['away_power']-power_factor_analysis['home_power']
+    power_factor_analysis['power_margin'] = power_factor_analysis['home_power_less_away'] - power_factor_analysis['Spread']
+    cols_to_move=['Week','Date','Home Team','Away Team','Spread','home_power_less_away','power_margin','power_ranking_success?','home_power','away_power']
+    power_factor_analysis = power_factor_analysis[ cols_to_move + [ col for col in power_factor_analysis if col not in cols_to_move ] ]
+    week_power_analysis=power_factor_analysis.groupby(['Week'])['power_ranking_success?'].sum().reset_index()
+    week_power_analysis['cum_sum']=week_power_analysis['power_ranking_success?'].cumsum()
+    
+    # st.write(week_power_analysis)
+
+
+    decile_df_abs_home=power_factor_analysis.groupby(['power_pick'])['power_ranking_success?'].sum().reset_index()
+    st.write('breaks out Home Away')
+    # st.write(decile_df_abs_home)
+    st.altair_chart(alt.Chart(decile_df_abs_home).mark_bar().encode(x='power_pick:N',y='power_ranking_success?'),use_container_width=True)
+
+    decile_df_abs_home_1=power_factor_analysis.groupby(['Week','power_pick'])['power_ranking_success?'].sum().reset_index()
+    decile_df_abs_home_1=power_factor_analysis.groupby(['Week','power_pick']).agg(
+        power_ranking_success=('power_ranking_success?','sum'),count=('power_pick','count')).reset_index()
+    # st.write('testing', test_replicate)
+    decile_df_abs_home_1['test_sum']=decile_df_abs_home_1.groupby(['Week'])['power_ranking_success'].transform('sum')
+    decile_df_abs_home_1['cum_sum_home_away']=decile_df_abs_home_1.groupby(['power_pick'])['power_ranking_success'].cumsum()
+    # st.write('breaks out Home Away by week')
+    # st.write(decile_df_abs_home_1)
+    # st.write( power_factor_analysis[(power_factor_analysis['Home Team'].str.contains('Hoffen') | power_factor_analysis['Away Team'].str.contains('Hoffen'))] )
+    # st.write(power_factor_analysis)
+
+
+    scale_3=alt.Scale(domain=['1','-1'],range=['blue','red'])
+    def graph(decile_df_abs_home_1,column):
+        line_cover= alt.Chart(decile_df_abs_home_1).mark_line().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
+        alt.Y(column),color=alt.Color('power_pick:Q',scale=scale_3))
+        text_cover=line_cover.mark_text(baseline='middle',dx=20,dy=-5).encode(text=alt.Text(column),color=alt.value('black'))
+        overlay = pd.DataFrame({column: [0]})
+        vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=1).encode(y=column)
+        return st.altair_chart(line_cover + text_cover + vline,use_container_width=True)
+
+
+    st.write('Below shows the weekly net result for Home and Away games backed by the Power Factor')
+    graph(decile_df_abs_home_1,column='power_ranking_success')
+    st.write('Blue = Home and Red = Away')
+    st.write('Below shows the cumulative win/loss by home away games')
+    graph(decile_df_abs_home_1,column='cum_sum_home_away')
+    st.write('What is the breakdown of power pick by Home / Away')
+    
+    line_cover= alt.Chart(decile_df_abs_home_1).mark_bar().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
+    alt.Y('count'),color=alt.Color('power_pick:N'))
+    text_cover=line_cover.mark_text(baseline='middle').encode(text=alt.Text('count:N'),color=alt.value('black'))
+    overlay = pd.DataFrame({'count': [3]})
+    vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=1).encode(y='count:Q')
+    st.altair_chart(line_cover + vline,use_container_width=True)
+
+
+
+    decile_df_abs_spread=power_factor_analysis.groupby(pd.qcut(power_factor_analysis['Spread'].abs(), q=10,duplicates='drop'))['power_ranking_success?'].sum().reset_index()
+    # st.write('breaks out Spread')
+    # st.write(decile_df_abs_spread)
+    line_cover= alt.Chart(decile_df_abs_spread).mark_bar().encode(alt.X('Spread',axis=alt.Axis(title='Spread',labelAngle=0)),
+    alt.Y('power_ranking_success?:Q'))
+    text_cover=line_cover.mark_text(baseline='middle').encode(text=alt.Text('power_ranking_success?'),color=alt.value('black'))
+    overlay = pd.DataFrame({'power_ranking_success?': [0]})
+    vline = alt.Chart(overlay).mark_rule(color='red', strokeWidth=1).encode(y='power_ranking_success?:Q')
+    st.write('The Below Chart splits the Spread into even buckets and looks at the win/loss record for each bucket')    
+    st.altair_chart(line_cover + vline,use_container_width=True)
+
+    st.write('Below is breaking into even buckets the difference between the Model and the Spread to see if there is any insight')
+    decile_df=power_factor_analysis.groupby(pd.qcut(power_factor_analysis['power_margin'], 8))['power_ranking_success?'].sum()
+    decile_df_abs=power_factor_analysis.groupby(pd.qcut(power_factor_analysis['power_margin'].abs(), 8))['power_ranking_success?'].sum().reset_index()
+    # st.write(decile_df)
+    # st.write(decile_df_abs)
+    line_cover= alt.Chart(decile_df_abs).mark_bar().encode(alt.X('power_margin',axis=alt.Axis(title='power_margin',labelAngle=0)),
+    alt.Y('power_ranking_success?:Q'))
+    text_cover=line_cover.mark_text(baseline='middle').encode(text=alt.Text('power_ranking_success?'),color=alt.value('black'))
+    overlay = pd.DataFrame({'power_ranking_success?': [0]})
+    vline = alt.Chart(overlay).mark_rule(color='red', strokeWidth=1).encode(y='power_ranking_success?:Q')
+    st.altair_chart(line_cover + vline,use_container_width=True)
 
 with st.expander('Checking Performance where Total Factor = 2 or 3:  Additional Diagnostic'):
     df_factor = betting_matches.copy()
