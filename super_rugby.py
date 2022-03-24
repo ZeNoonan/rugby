@@ -6,9 +6,11 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=3
+finished_week=5
+placeholder_1=st.empty()
+placeholder_2=st.empty()
 
-# All bets made for super rugby
+# backed Rebels, only team selected
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
@@ -44,7 +46,7 @@ local='C:/Users/Darragh/Documents/Python/rugby/super_rugby.csv'
 # data=pd.read_csv(local,parse_dates=['Date'])
 data=(read_csv_data_date(local)).copy()
 # data=pd.read_csv(url,parse_dates=['Date'])
-# st.write(data)
+# st.write('data',data)
 
 # data['Date']=pd.to_datetime(data['Date'],errors='coerce')
 data['year']=data['Date'].dt.year
@@ -152,7 +154,7 @@ penalty_3=penalty_cover_3(penalty_2,'penalty_sign','prev_penalty')
 # intercept_0=spread_workings(data)
 # intercept_0['intercepts']=intercept_0['home_intercepts']
 # intercept=spread_workings(data).drop(['penalties_conceded'],axis=1).rename(columns={'intercepts':'penalties_conceded'})
-# # st.write(intercept)
+# st.write('check for penalties condeded',intercept)
 # intercept_1 = pd.DataFrame(penalty_workings(intercept,-1))
 # intercept_2=clean_version_of_above_which_works(intercept_1)
 # intercept_3=penalty_cover_3(intercept_2,'penalty_sign','prev_penalty')
@@ -438,7 +440,7 @@ with st.expander('Penalty Factor by Match Graph'):
     # st.write(updated_df)
     # updated_df=penalty_df
 
-with st.expander('Betting Slip Matches'):
+with placeholder_2.expander('Betting Slip Matches'):
     def run_analysis(updated_df):
         betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
         'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign',
@@ -615,9 +617,10 @@ with st.expander('Analysis of Factors'):
         df_table_1.loc['Total']=df_table_1.sum()
         # st.write('latest', df_table_1)
         # st.write('latest', df_table_1.shape)
-        if df_table_1.shape > (2,7):
+        if df_table_1.shape > (3,7):
             # st.write('Returning df with analysis')
             # st.write('Update below table when winning bet returns')
+            # st.write('if statement')
             # df_table_1.loc['No. of Bets Made'] = df_table_1.loc[['-1']].sum() # No winning bets so far!!!
             df_table_1.loc['No. of Bets Made'] = df_table_1.loc[['1','-1']].sum() # No losing bets so far!!!
             # df_table_1.loc['% Winning'] = ((df_table_1.loc[1] / df_table_1.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
@@ -625,6 +628,7 @@ with st.expander('Analysis of Factors'):
             df_table_1.loc['% Winning'] = ((df_table_1.loc['1'] / df_table_1.loc['No. of Bets Made']))
         else:
             # st.write('Returning df with no analysis')
+            # st.write('else statement')
             return df_table_1
         return df_table_1
     total_factor_table = analysis_factor_function(analysis_factors)
@@ -682,10 +686,10 @@ with st.expander('Analysis of Factors'):
         st.write(bets_made_factor_table_presentation_penalty)
 
     with columns_3:
-        st.subheader('This represents the Intercept factor')
-        st.write('This is the total number of matches broken down by Factor result')
+        st.subheader('There is no Intercept factor')
+        # st.write('This is the total number of matches broken down by Factor result')
         # st.write(total_factor_table_presentation_intercept)
-        st.write('This is the number of bets made broken down by Factor result')
+        # st.write('This is the number of bets made broken down by Factor result')
         # st.write(bets_made_factor_table_presentation_intercept)
 
     with columns_4:
@@ -944,6 +948,47 @@ with st.expander('Betting Result'):
 #     updated_test_chart=chart_power+vline+text
     
 #     st.altair_chart(updated_test_chart,use_container_width=True)
+
+with placeholder_1.expander('Weekly Results'):
+    weekly_results=analysis.groupby(['Week','result']).agg(winning=('result','sum'),count=('result','count'))
+    weekly_test=analysis[analysis['total_factor'].abs()>2].loc[:,['Week','result']].copy()
+    df9 = weekly_test.groupby(['result','Week']).size().unstack(fill_value=0)
+    df9=df9.reset_index()
+    df9['result']=df9['result'].round(1).astype(str)
+    df9=df9.set_index('result').sort_index(ascending=False)
+    df9['grand_total']=df9.sum(axis=1)
+    df9.loc['Winning_Bets']=(df9.loc['1.0'])
+    df9.loc['Losing_Bets']=(df9.loc['-1.0'])
+    df9.loc['No. of Bets Made'] = df9.loc['1.0']+ df9.loc['-1.0']
+    df9.loc['PL_Bets']=df9.loc['Winning_Bets'] - df9.loc['Losing_Bets']
+    df9=df9.apply(pd.to_numeric, downcast='float')
+    graph_pl_data=df9.loc[['PL_Bets'],:].drop('grand_total',axis=1)
+    graph_pl_data=graph_pl_data.stack().reset_index().drop('result',axis=1).rename(columns={0:'week_result'})
+    graph_pl_data['Week']=graph_pl_data['Week'].astype(int)
+    graph_pl_data['total_result']=graph_pl_data['week_result'].cumsum()
+    graph_pl_data=graph_pl_data.melt(id_vars='Week',var_name='category',value_name='result')
+    df9.loc['% Winning'] = ((df9.loc['1.0']) / (df9.loc['1.0'] + df9.loc['-1.0']) ).replace({'<NA>':np.NaN})
+    table_test=df9.copy()
+    # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
+    df9 = df9.style.format("{:.1f}", na_rep='-')
+    df9 = df9.format(formatter="{:.0%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
+        .format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
+        # .format(formatter="{:.0f}", subset=pd.IndexSlice[['-0.0'], :]) \
+
+    def graph_pl(decile_df_abs_home_1,column):
+        line_cover= alt.Chart(decile_df_abs_home_1).mark_line().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
+        alt.Y(column),color=alt.Color('category'))
+        text_cover=line_cover.mark_text(baseline='middle',dx=0,dy=-15).encode(text=alt.Text(column),color=alt.value('black'))
+        overlay = pd.DataFrame({column: [0]})
+        vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=1).encode(y=column)
+        return st.altair_chart(line_cover + text_cover + vline,use_container_width=True)
+
+    graph_pl(graph_pl_data,column='result')
+
+    st.write('Total betting result per Betting Table',betting_matches['result'].sum())
+    st.write('Total betting result per Above Table',table_test.loc['PL_Bets','grand_total'])
+    st.write(df9)
+
 
 with st.expander('Checking Performance where Total Factor = 2 or 3:  Additional Diagnostic'):
     df_factor = betting_matches.copy()
