@@ -7,7 +7,11 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-finished_week=14
+#  all done 31 march zebre backed
+
+finished_week=15
+home_advantage=3
+# home_adv_parameter = 3
 
 placeholder_1=st.empty()
 placeholder_2=st.empty()
@@ -15,14 +19,14 @@ placeholder_2=st.empty()
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
-# results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-# csv_save(results_excel)
+csv_save(results_excel)
 
-# data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
-data=pd.read_csv(url,parse_dates=['Date'])
+data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+# data=pd.read_csv(url,parse_dates=['Date'])
 
 # data['Date']=pd.to_datetime(data['Date'],errors='coerce')
 data['year']=data['Date'].dt.year
@@ -197,8 +201,8 @@ def games_matrix_workings(first_4):
 # with st.beta_expander('CORRECT Testing reworking the DataFrame'):
 test_df['at_home'] = 1
 test_df['at_away'] = -1
-test_df['home_pts_adv'] = 3
-test_df['away_pts_adv'] = -3
+test_df['home_pts_adv'] = home_advantage
+test_df['away_pts_adv'] = -home_advantage
 test_df['away_spread']=-test_df['Spread']
 test_df=test_df.rename(columns={'Spread':'home_spread'})
 test_df_1=test_df.loc[:,['unique_match_id','Week','Home ID','Away ID','at_home','at_away','home_spread','away_spread','home_pts_adv','away_pts_adv']].copy()
@@ -272,6 +276,7 @@ home_power_rank_merge=power_ranking_combined.loc[:,['ID','week','final_power']].
 away_power_rank_merge=power_ranking_combined.loc[:,['ID','week','final_power']].copy().rename(columns={'week':'Week','ID':'Away ID'})
 updated_df=pd.merge(matches_df,home_power_rank_merge,on=['Home ID','Week']).rename(columns={'final_power':'home_power'})
 updated_df=pd.merge(updated_df,away_power_rank_merge,on=['Away ID','Week']).rename(columns={'final_power':'away_power'})
+# updated_df['home_power']=updated_df['home_power']+home_adv_parameter
 updated_df['calculated_spread']=updated_df['away_power']-updated_df['home_power']
 updated_df['spread_working']=updated_df['home_power']-updated_df['away_power']+updated_df['Spread']
 updated_df['power_pick'] = np.where(updated_df['spread_working'] > 0, 1,
@@ -834,9 +839,11 @@ with st.expander('Deep Dive on Power Factor'):
 
 
     decile_df_abs_home=power_factor_analysis.groupby(['power_pick'])['power_ranking_success?'].sum().reset_index()
-    st.write('breaks out Home Away')
-    # st.write(decile_df_abs_home)
-    st.altair_chart(alt.Chart(decile_df_abs_home).mark_bar().encode(x='power_pick:N',y='power_ranking_success?'),use_container_width=True)
+    decile_df_abs_home['per_cent']=decile_df_abs_home['power_ranking_success?']/decile_df_abs_home['power_ranking_success?'].sum()
+    st.write('breaks out Power Pick Success by Home / Away')
+    # st.write(decile_df_abs_home.sort_values(by='power_pick',ascending=False).style.format({'per_cent':"{:.0%}"}))
+
+    # st.altair_chart(alt.Chart(decile_df_abs_home).mark_bar().encode(x='power_pick:N',y='power_ranking_success?'),use_container_width=True)
 
     decile_df_abs_home_1=power_factor_analysis.groupby(['Week','power_pick'])['power_ranking_success?'].sum().reset_index()
     decile_df_abs_home_1=power_factor_analysis.groupby(['Week','power_pick']).agg(
@@ -866,11 +873,17 @@ with st.expander('Deep Dive on Power Factor'):
     st.write('Below shows the cumulative win/loss by home away games')
     graph(decile_df_abs_home_1,column='cum_sum_home_away')
     st.write('What is the breakdown of power pick by Home / Away')
-    
+    st.write('Total picks by Home / Away')
+    table_count=power_factor_analysis.groupby(['power_pick']).agg(no_games=('power_ranking_success?','count'),result=('power_ranking_success?','sum')).reset_index().sort_values(by='power_pick',ascending=False)\
+        .rename(columns={'no_games':'no._games'})
+    # table_count=power_factor_analysis.groupby(['power_pick'])['power_ranking_success?'].count().reset_index().sort_values(by='power_pick',ascending=False)\
+        # .rename(columns={'power_ranking_success?':'no._games'})
+    table_count['per_cent']=table_count['no._games']/table_count['no._games'].sum()
+    st.write(table_count.set_index('power_pick').style.format({'per_cent':"{:.0%}"}))
     line_cover= alt.Chart(decile_df_abs_home_1).mark_bar().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
     alt.Y('count'),color=alt.Color('power_pick:N'))
     text_cover=line_cover.mark_text(baseline='middle').encode(text=alt.Text('count:N'),color=alt.value('black'))
-    overlay = pd.DataFrame({'count': [3]})
+    overlay = pd.DataFrame({'count': [4]})
     vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=1).encode(y='count:Q')
     st.altair_chart(line_cover + vline,use_container_width=True)
 

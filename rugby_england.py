@@ -6,8 +6,13 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=20
-# backed Worcester, still have Bristol to back; 2 way market is not up yet
+finished_week=21
+number_of_teams=13
+# wasps backed 31 march
+
+home_advantage=3
+# home_adv_parameter = 3
+
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_premiership.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_england_id.xlsx')
 
@@ -262,7 +267,7 @@ grouped = test_df_2.groupby('ID')
 # https://stackoverflow.com/questions/62471485/is-it-possible-to-insert-missing-sequence-numbers-in-python
 ranking_power=[]
 for name, group in grouped:
-    dfseq = pd.DataFrame.from_dict({'Week': range( -3,21 )}).merge(group, on='Week', how='outer').fillna(np.NaN)
+    dfseq = pd.DataFrame.from_dict({'Week': range( -3,finished_week+1 )}).merge(group, on='Week', how='outer').fillna(np.NaN)
     dfseq['ID']=dfseq['ID'].fillna(method='ffill')
     dfseq['home_pts_adv']=dfseq['home_pts_adv'].fillna(0)
     dfseq['spread']=dfseq['spread'].fillna(0)
@@ -285,19 +290,19 @@ list_power_ranking=[]
 # st.write('check this',df_power)
 power_df=df_power.loc[:,['Week','ID','adj_spread']].copy()
 games_df=matrix_df_1.copy()
-first=list(range(-3,18))
-last=list(range(0,21))
+first=list(range(-3,finished_week+1-3))
+last=list(range(0,finished_week+1))
 for first,last in zip(first,last):
     first_section=games_df[games_df['Week'].between(first,last)]
     full_game_matrix=games_matrix_workings(first_section)
-    adjusted_matrix=full_game_matrix.loc[0:11,0:11]
+    adjusted_matrix=full_game_matrix.loc[0:(number_of_teams-2),0:(number_of_teams-2)]
     df_inv = pd.DataFrame(np.linalg.pinv(adjusted_matrix.values), adjusted_matrix.columns, adjusted_matrix.index)
     power_df_week=power_df[power_df['Week']==last].drop_duplicates(subset=['ID'],keep='last').set_index('ID')\
-    .drop('Week',axis=1).rename(columns={'adj_spread':0}).loc[:11,:]
+    .drop('Week',axis=1).rename(columns={'adj_spread':0}).loc[:(number_of_teams-2),:]
     result = df_inv.dot(pd.DataFrame(power_df_week))
     result.columns=['power']
-    avg=(result['power'].sum())/13
-    result['avg_pwr_rank']=(result['power'].sum())/13
+    avg=(result['power'].sum())/number_of_teams
+    result['avg_pwr_rank']=(result['power'].sum())/number_of_teams
     result['final_power']=result['avg_pwr_rank']-result['power']
     df_pwr=pd.DataFrame(columns=['final_power'],data=[avg])
     result=pd.concat([result,df_pwr],ignore_index=True)
@@ -313,6 +318,7 @@ home_power_rank_merge=power_ranking_combined.loc[:,['ID','week','final_power']].
 away_power_rank_merge=power_ranking_combined.loc[:,['ID','week','final_power']].copy().rename(columns={'week':'Week','ID':'Away ID'})
 updated_df=pd.merge(matches_df,home_power_rank_merge,on=['Home ID','Week']).rename(columns={'final_power':'home_power'})
 updated_df=pd.merge(updated_df,away_power_rank_merge,on=['Away ID','Week']).rename(columns={'final_power':'away_power'})
+# updated_df['home_power']=updated_df['home_power']+home_adv_parameter
 updated_df['calculated_spread']=updated_df['away_power']-updated_df['home_power']
 updated_df['spread_working']=updated_df['home_power']-updated_df['away_power']+updated_df['Spread']
 updated_df['power_pick'] = np.where(updated_df['spread_working'] > 0, 1,
@@ -589,6 +595,7 @@ with st.expander('Analysis of Factors'):
 
     # st.write('check for penalties', analysis_factors)
     def analysis_factor_function(analysis_factors,option_1='home_turnover_sign',option_2='away_turnover_sign'):
+        # sourcery skip: remove-unnecessary-else, swap-if-else-branches
         analysis_factors.loc[:,['home_turnover_success?']] = analysis_factors['home_turnover_sign'] * analysis_factors['home_cover_result']
         analysis_factors.loc[:,['away_turnover_success?']] = analysis_factors['away_turnover_sign'] * analysis_factors['home_cover_result']
         analysis_factors.loc[:,['home_cover_season_success?']] = analysis_factors['home_cover_sign'] * analysis_factors['home_cover_result']  
@@ -997,9 +1004,9 @@ with st.expander('Deep Dive on Power Factor'):
 
 
     decile_df_abs_home=power_factor_analysis.groupby(['power_pick'])['power_ranking_success?'].sum().reset_index()
-    st.write('breaks out Home Away')
+    # st.write('breaks out Home Away')
     # st.write(decile_df_abs_home)
-    st.altair_chart(alt.Chart(decile_df_abs_home).mark_bar().encode(x='power_pick:N',y='power_ranking_success?'),use_container_width=True)
+    # st.altair_chart(alt.Chart(decile_df_abs_home).mark_bar().encode(x='power_pick:N',y='power_ranking_success?'),use_container_width=True)
 
     decile_df_abs_home_1=power_factor_analysis.groupby(['Week','power_pick'])['power_ranking_success?'].sum().reset_index()
     decile_df_abs_home_1=power_factor_analysis.groupby(['Week','power_pick']).agg(
@@ -1029,7 +1036,12 @@ with st.expander('Deep Dive on Power Factor'):
     st.write('Below shows the cumulative win/loss by home away games')
     graph(decile_df_abs_home_1,column='cum_sum_home_away')
     st.write('What is the breakdown of power pick by Home / Away')
-    
+    st.write('Total picks by Home / Away')
+    table_count=power_factor_analysis.groupby(['power_pick']).agg(no_games=('power_ranking_success?','count'),result=('power_ranking_success?','sum')).reset_index().sort_values(by='power_pick',ascending=False)\
+        .rename(columns={'no_games':'no._games'})
+    table_count['per_cent']=table_count['no._games']/table_count['no._games'].sum()
+    st.write(table_count.set_index('power_pick').style.format({'per_cent':"{:.0%}"}))
+
     line_cover= alt.Chart(decile_df_abs_home_1).mark_bar().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
     alt.Y('count'),color=alt.Color('power_pick:N'))
     text_cover=line_cover.mark_text(baseline='middle').encode(text=alt.Text('count:N'),color=alt.value('black'))
