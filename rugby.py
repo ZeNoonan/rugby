@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 
 finished_week=15
 home_advantage=3
-# home_adv_parameter = 3
+# home_adv_parameter = 5
 
 placeholder_1=st.empty()
 placeholder_2=st.empty()
@@ -23,7 +23,7 @@ results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_resul
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-csv_save(results_excel)
+# csv_save(results_excel)
 
 data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
 # data=pd.read_csv(url,parse_dates=['Date'])
