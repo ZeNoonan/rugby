@@ -7,9 +7,9 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-#  all done 31 march zebre backed
+# just munster backed 21 april
 
-finished_week=15
+finished_week=16
 home_advantage=3
 # home_adv_parameter = 5
 
@@ -23,7 +23,7 @@ results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_resul
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
     return x
-# csv_save(results_excel)
+csv_save(results_excel)
 
 data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
 # data=pd.read_csv(url,parse_dates=['Date'])

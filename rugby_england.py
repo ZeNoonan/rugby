@@ -6,9 +6,9 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=21
+finished_week=22
 number_of_teams=13
-# wasps backed 31 march
+# bet365 odds not up for sat/sun need to back on those days 21 april today
 
 home_advantage=3
 # home_adv_parameter = 3
