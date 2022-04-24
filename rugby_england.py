@@ -8,7 +8,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 st.set_page_config(layout="wide")
 finished_week=22
 number_of_teams=13
-# bet365 odds not up for sat/sun need to back on those days 21 april today
+# backed 23 april worcester and exeter
 
 home_advantage=3
 # home_adv_parameter = 3

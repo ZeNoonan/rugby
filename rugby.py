@@ -7,7 +7,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-# just munster backed 21 april
+# just munster backed 21 april and checked again 23 april
 
 finished_week=16
 home_advantage=3
