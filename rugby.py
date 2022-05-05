@@ -7,9 +7,10 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-# just munster backed 21 april and checked again 23 april
+# all backed 29 april
+# looks like next round is 20 may, just check betting that matches have to be rescheduled
 
-finished_week=16
+finished_week=17
 home_advantage=3
 # home_adv_parameter = 5
 

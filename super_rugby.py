@@ -6,11 +6,11 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=9
+finished_week=11
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 
-#  mon 18 april drua backed
+#  3 may backed all
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
