@@ -7,7 +7,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-# all backed 29 april
+# all backed 19 may
 # looks like next round is 20 may, just check betting that matches have to be rescheduled
 
 finished_week=17
