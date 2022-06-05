@@ -6,11 +6,11 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=13
+finished_week=15
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 
-#  16 may no teams selected for betting
+#  30 may backed highlanders +15.5 and hurricanes +2.5
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
@@ -18,7 +18,7 @@ id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.x
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/super_rugby.csv')
     return x
-# csv_save(results_excel) #####################
+csv_save(results_excel) #####################
 
 @st.cache
 def read_csv_data(file):
@@ -68,6 +68,8 @@ data=pd.merge(fb_ref_2020,team_names_id_2,on='Away Team').rename(columns={'ID':'
 cols_to_move=['Week','Date','Home ID','Home Team','Away ID','Away Team','Spread']
 cols = cols_to_move + [col for col in data if col not in cols_to_move]
 data=data[cols]
+
+# st.write('checking data', data.sort_values(by='Week'))
 
 def spread_workings(data):
     data['home_win']=data['Home Points'] - data['Away Points']
@@ -211,6 +213,7 @@ first_qtr=matrix_df_1.copy()
 start=-3
 finish=0
 first_4=first_qtr[first_qtr['Week'].between(start,finish)].copy()
+# st.write('check this',first_4)
 def games_matrix_workings(first_4):  # sourcery skip: remove-unreachable-code
     group_week = first_4.groupby('Week')
     raw_data_2=[]
@@ -218,7 +221,7 @@ def games_matrix_workings(first_4):  # sourcery skip: remove-unreachable-code
     for name, group in group_week:
         group['game_adj']=next(game_weights)
         raw_data_2.append(group)
-
+    # st.write('raw data', raw_data_2)
     df3 = pd.concat(raw_data_2, ignore_index=True)
     adj_df3=df3.loc[:,['Home ID', 'Away ID', 'game_adj']].copy()
     test_adj_df3 = adj_df3.rename(columns={'Home ID':'Away ID', 'Away ID':'Home ID'})
@@ -263,7 +266,7 @@ grouped = test_df_2.groupby('ID')
 # https://stackoverflow.com/questions/62471485/is-it-possible-to-insert-missing-sequence-numbers-in-python
 ranking_power=[]
 for name, group in grouped:
-    dfseq = pd.DataFrame.from_dict({'Week': range( -3,21 )}).merge(group, on='Week', how='outer').fillna(np.NaN)
+    dfseq = pd.DataFrame.from_dict({'Week': range( -3,(finished_week+1) )}).merge(group, on='Week', how='outer').fillna(np.NaN)
     dfseq['ID']=dfseq['ID'].fillna(method='ffill')
     dfseq['home_pts_adv']=dfseq['home_pts_adv'].fillna(0)
     dfseq['spread']=dfseq['spread'].fillna(0)
@@ -286,8 +289,8 @@ list_power_ranking=[]
 # st.write('check this',df_power)
 power_df=df_power.loc[:,['Week','ID','adj_spread']].copy()
 games_df=matrix_df_1.copy()
-first=list(range(-3,18))
-last=list(range(0,21))
+first=list(range(-3,(finished_week-2)))
+last=list(range(0,(finished_week+1)))
 for first,last in zip(first,last):
     first_section=games_df[games_df['Week'].between(first,last)]
     full_game_matrix=games_matrix_workings(first_section)
@@ -647,7 +650,7 @@ with st.expander('Analysis of Factors'):
         total_factor_table_presentation = total_factor_table_presentation.format(formatter="{:.1%}", subset=pd.IndexSlice[['% Winning'], :])
         return total_factor_table_presentation
 
-    st.write('check', total_factor_table)
+    # st.write('check', total_factor_table)
     total_factor_table_presentation=clean_presentation_table(total_factor_table)
     total_factor_table_presentation_penalty=clean_presentation_table(total_factor_table_penalty)
     total_factor_table_presentation_intercept=clean_presentation_table(total_factor_table_intercept)

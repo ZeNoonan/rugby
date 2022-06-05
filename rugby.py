@@ -7,10 +7,9 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 
-# all backed 19 may
-# looks like next round is 20 may, just check betting that matches have to be rescheduled
+# all backed 30 may
 
-finished_week=17
+finished_week=19
 home_advantage=3
 # home_adv_parameter = 5
 
@@ -196,7 +195,7 @@ def games_matrix_workings(first_4):
     full_stack.columns = full_stack.columns.droplevel(0)
     return full_stack
     
-    full_stack=games_matrix_workings(first_4)
+    # full_stack=games_matrix_workings(first_4)
     # st.write('Check sum if True all good', full_stack.sum().sum()==0)
 
 # with st.beta_expander('CORRECT Testing reworking the DataFrame'):
