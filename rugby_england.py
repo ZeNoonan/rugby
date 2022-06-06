@@ -6,9 +6,9 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=23
+finished_week=25
 number_of_teams=13
-# all backed one team could only put 41.77, so just to top that up when funds come in
+# 31 May all backed now
 
 home_advantage=3
 # home_adv_parameter = 3
