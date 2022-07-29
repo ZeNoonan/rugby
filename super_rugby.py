@@ -386,9 +386,18 @@ with st.expander('Turnover Factor by Match Graph'):
         updated_df=pd.merge(updated_df,turnover_away,on=['Date','Week','Away ID'],how='left').rename(columns={'prev_turnover':'away_prev_turnover','turnover_sign':'away_turnover_sign'})
         return updated_df
 
+    st.write('code below here has the updated df which feeds into the Betting Slip Tab')
+    st.write('updated df_1 is just a copy of updated_df')
     updated_df = turnover_data_prep_2(turnover_matches, updated_df)
     updated_df_intercept = turnover_data_prep_2(intercept_matches, updated_df_1)
+    interecept_extract_to_merge=updated_df_intercept.loc[:,['Week','Home Team','Away Team','Spread','home_turnover_sign','away_turnover_sign']]\
+    .rename(columns={'home_turnover_sign':'home_intercept_sign','away_turnover_sign':'away_intercept_sign'})
+    # st.write('check this to see what to bring in for loc', updated_df_intercept)
     updated_df_sin_bin = turnover_data_prep_2(sin_bin_matches, updated_df_1)
+    sin_bin_extract_to_merge=updated_df_sin_bin.loc[:,['Week','Home Team','Away Team','Spread','home_turnover_sign','away_turnover_sign']]\
+    .rename(columns={'home_turnover_sign':'home_sin_bin_sign','away_turnover_sign':'away_sin_bin_sign'})
+
+
     # st.write(updated_df_intercept)
     # st.write(updated_df_intercept.dtypes)
 
@@ -422,6 +431,8 @@ with st.expander('Penalty Factor by Match Graph'):
 
     penalty_df=pd.merge(penalty_df,penalty_away,on=['Date','Week','Away ID'],how='left').rename(columns={'prev_penalty':'away_prev_penalty',
     'penalty_sign':'away_penalty_sign'})
+    # AgGrid(penalty_df)
+    penalty_extract_to_merge=penalty_df.loc[:,['Week','Home Team','Away Team','Spread','home_penalty_sign','away_penalty_sign']]
 
     df_stdc_2=pd.merge(penalty_matches,team_names_id,on='ID').rename(columns={'Home Team':'Team'})
     # st.write(df_stdc_1)
@@ -444,12 +455,40 @@ with st.expander('Penalty Factor by Match Graph'):
     # updated_df=penalty_df
 
 with placeholder_2.expander('Betting Slip Matches'):
+    updated_df=pd.merge(updated_df,interecept_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
+    updated_df=pd.merge(updated_df,sin_bin_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
+    updated_df=pd.merge(updated_df,penalty_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
+    # AgGrid(updated_df)
+    # st.write('updated df', updated_df)
+
     def run_analysis(updated_df):
-        betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
-        'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign',
-        'home_cover_sign','away_cover_sign','power_pick','home_cover_result']]
+        
+        betting_matches=updated_df.copy()
+
+        # betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
+        # 'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign',
+        # 'home_cover_sign','away_cover_sign','power_pick','home_cover_result']]
+        
+        # betting_matches=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
+        # 'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign',
+        # 'home_cover_sign','away_cover_sign','power_pick','home_cover_result','home_penalty_sign','away_penalty_sign',
+        # 'home_intercept_sign','away_intercept_sign','home_sin_bin_sign','away_sin_bin_sign']]
+        
+        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        # betting_matches['away_cover_sign']+betting_matches['power_pick']
+
+        # # below is using the intercept as well
+        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']
+
         betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
-        betting_matches['away_cover_sign']+betting_matches['power_pick']
+        betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
+        betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']
+
+        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
+        betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']+betting_matches['home_sin_bin_sign']+betting_matches['away_sin_bin_sign']
+
         betting_matches['bet_on'] = np.where(betting_matches['total_factor']>2,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-2,betting_matches['Away Team'],''))
         betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>2,1,np.where(betting_matches['total_factor']<-2,-1,0)))
         betting_matches['bet_sign'] = betting_matches['bet_sign'].astype(float)
@@ -467,10 +506,34 @@ with placeholder_2.expander('Betting Slip Matches'):
         return betting_matches
     # st.write(betting_matches.dtypes)
     # st.write(betting_matches)
-    betting_matches_penalty=run_analysis(penalty_df)
-    betting_matches_intercept=run_analysis(updated_df_intercept)
-    betting_matches_sin_bin=run_analysis(updated_df_sin_bin)
+
+    def run_analysis_factors(updated_df):
+        betting_matches=updated_df.copy()
+        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        betting_matches['away_cover_sign']+betting_matches['power_pick']
+        betting_matches['bet_on'] = np.where(betting_matches['total_factor']>2,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-2,betting_matches['Away Team'],''))
+        betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>2,1,np.where(betting_matches['total_factor']<-2,-1,0)))
+        betting_matches['bet_sign'] = betting_matches['bet_sign'].astype(float)
+        betting_matches['home_cover'] = betting_matches['home_cover'].astype(float)
+        betting_matches['result']=betting_matches['home_cover_result'] * betting_matches['bet_sign']
+        st.write('testing sum of betting result',betting_matches['result'].sum())
+        betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
+        betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
+        st.write('testing sum of betting all result',betting_matches['result_all'].sum())
+        cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
+        cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
+        betting_matches=betting_matches[cols]
+        betting_matches=betting_matches.sort_values(['Week','Date'],ascending=[True,True])
+        return betting_matches
+
+    betting_matches_penalty=run_analysis_factors(penalty_df)
+    betting_matches_intercept=run_analysis_factors(updated_df_intercept)
+    betting_matches_sin_bin=run_analysis_factors(updated_df_sin_bin)
     betting_matches=run_analysis(updated_df)
+
+
+
+
     presentation_betting_matches=betting_matches.copy()
 
     # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
@@ -521,12 +584,13 @@ with placeholder_2.expander('Betting Slip Matches'):
 
     # container.grid_response
     # AgGrid(betting_matches.sort_values('Date').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}"}))
+    # AgGrid(betting_matches.sort_values('Date'))
     # update
 
 
 
 
-    st.write('Below is just checking an individual team')
+    # st.write('Below is just checking an individual team')
     betting_matches_team=betting_matches.copy()
     # cols_to_move_now=['Week','Home Team','Away Team','Spread','Home Points','Away Points','home_cover_result','home_cover','away_cover']
     # cols = cols_to_move_now + [col for col in betting_matches_team if col not in cols_to_move_now]
