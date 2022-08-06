@@ -561,14 +561,55 @@ with st.expander('Analysis of Betting Results across 1 to 5 factors'):
     alt.Y('winning',stack="normalize"),color=alt.Color('result_all',scale=color_scale))
     overlay = pd.DataFrame({'winning': [0.5]})
     vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=2).encode(y='winning:Q')
-    text = alt.Chart(normalized_table).mark_text(dx=-1, dy=+60, color='white').encode(
-    x=alt.X('total_factor:O'),
-    y=alt.Y('winning',stack="normalize"),
-    detail='winning',
-    text=alt.Text('winning:Q', format='.0f'))
-    updated_test_chart=chart_power+vline+text
+    # text = alt.Chart(normalized_table).mark_text(dx=-1, dy=+60, color='white').encode(
+    # x=alt.X('total_factor:O'),
+    # y=alt.Y('winning',stack="normalize"),
+    # detail='winning',
+    # text=alt.Text('winning:Q', format='.0f'))
+    updated_test_chart=chart_power+vline
     
     st.altair_chart(updated_test_chart,use_container_width=True)
+
+    chart_power= alt.Chart(normalized_table).mark_bar().encode(alt.X('total_factor:O',axis=alt.Axis(title='factor',labelAngle=0)),
+    alt.Y('winning'),color=alt.Color('result_all',scale=color_scale))
+    overlay = pd.DataFrame({'winning': [0.5]})
+    vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=2).encode(y='winning:Q')
+    updated_test_chart=chart_power+vline
+    st.altair_chart(updated_test_chart,use_container_width=True)
+
+    reset_data=totals_1.copy()
+    reset_data['result_all']=reset_data['result_all'].replace({'tie':0,'win':1,'lose':-1})
+    # st.write('test',reset_data)
+    reset_data=reset_data.pivot(index='result_all',columns='total_factor',values='winning').fillna(0)
+    # st.write('look',reset_data)
+    reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
+    reset_data=reset_data.sort_values(by='betting_factor_total',ascending=False)
+
+    reset_data=reset_data.reset_index()
+    # st.write('reset data', reset_data)
+    reset_data['result_all']=reset_data['result_all'].astype(float).round(1).astype(str)
+    reset_data=reset_data.set_index('result_all')
+    reset_data.loc['Total']=reset_data.sum()
+
+    reset_data.loc['Winning_Bets']=(reset_data.loc['1.0'])
+    reset_data.loc['Losing_Bets']=(reset_data.loc['-1.0'])
+    reset_data.loc['No. of Bets Made'] = reset_data.loc['1.0'] + reset_data.loc['-1.0']
+    reset_data.loc['PL_Bets']=reset_data.loc['Winning_Bets'] - reset_data.loc['Losing_Bets']
+    reset_data=reset_data.apply(pd.to_numeric, downcast='float')
+    reset_data.loc['% Winning'] = ((reset_data.loc['1.0']) /
+    (reset_data.loc['1.0'] + reset_data.loc['-1.0']) ).replace({'<NA>':np.NaN})
+
+    # reset_data.loc['No. of Bets Made'] = reset_data.loc[['1','-1']].sum() 
+    # reset_data=reset_data.apply(pd.to_numeric, downcast='integer')
+    # reset_data.loc['% Winning'] = ((reset_data.loc['1'] / reset_data.loc['No. of Bets Made'])).replace({'<NA>':np.NaN})
+    st.write('This shows the betting result')
+    # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
+    reset_data = reset_data.style.format("{:.1f}", na_rep='-')
+    reset_data = reset_data.format(formatter="{:.1%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
+        .format(formatter="{:.0f}", subset=pd.IndexSlice[['0.0'], :]) \
+            .format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
+
+    st.write(reset_data)
 
     # st.write('shows the number of games at each factor level')
     # st.write(totals.rename(columns={'winning':'number_of_games'}))
