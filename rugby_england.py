@@ -6,12 +6,29 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
+
+x =pd.read_html("https://www.premiershiprugby.com/gallagher-premiership-rugby/fixtures-results/")
+st.write(x)
+
 finished_week=27
 number_of_teams=13
 # 31 May all backed now
 
 home_advantage=3
 # home_adv_parameter = 3
+
+season_list={'season_2022': {
+    "odds_file": "C:/Users/Darragh/Documents/Python/NFL/nfl_odds_2022_2023.csv",
+    "scores_file": "C:/Users/Darragh/Documents/Python/NFL/nfl_scores_2022_2023.csv",
+    "team_id": "C:/Users/Darragh/Documents/Python/NFL/nfl_teams_2022_2023.csv",
+    "season_year": "2022_2023",
+    "prior_year_file": "C:/Users/Darragh/Documents/Python/NFL/nfl_scores_2021_2022.csv"},
+'season_2021' : {
+    "odds_file": "C:/Users/Darragh/Documents/Python/NFL/nfl_odds_2021_2022.csv",
+    "scores_file": "C:/Users/Darragh/Documents/Python/NFL/nfl_scores_2021_2022.csv",
+    "team_id": "C:/Users/Darragh/Documents/Python/NFL/nfl_teams_2021_2022.csv",
+    "season_year": "2021_2022",
+    "prior_year_file": 'C:/Users/Darragh/Documents/Python/NFL/nfl_scores_2019_2020.csv'}}
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_premiership.xlsx')
 id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_england_id.xlsx')
@@ -20,9 +37,9 @@ placeholder_1=st.empty()
 placeholder_2=st.empty()
 
 def csv_save(x):
-    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_england_data.csv')
+    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results_premiership_2022_2023.csv')
     return x
-csv_save(results_excel)
+# csv_save(results_excel)
 
 @st.cache
 def read_csv_data(file):
