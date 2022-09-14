@@ -19,13 +19,13 @@ placeholder_2=st.empty()
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
 url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
-results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results.xlsx')
+results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.xlsx')
 def csv_save(x):
-    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv')
+    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.csv')
     return x
 csv_save(results_excel)
 
-data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results.csv',parse_dates=['Date'])
+data=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.csv',parse_dates=['Date'])
 # data=pd.read_csv(url,parse_dates=['Date'])
 
 # data['Date']=pd.to_datetime(data['Date'],errors='coerce')
