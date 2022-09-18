@@ -667,9 +667,15 @@ with st.expander('Analysis of Factors'):
         if df_table_1.shape > (2,7):
             # st.write('Returning df with analysis')
             # df_table_1.loc['No. of Bets Made'] = df_table_1.loc[[1,-1]].sum() # No losing bets so far!!!
-            df_table_1.loc['No. of Bets Made'] = df_table_1.loc[['1','-1']].sum() # No losing bets so far!!!
+            df_table_1.loc['Winning_Bets']=(df_table_1.loc[df_table_1.index.isin({'1.0'})].sum(axis=0))+(df_table_1.loc[df_table_1.index.isin({'0.5'})].sum(axis=0)/2)
+            # df_table_1.loc['Losing_Bets']=(df_table_1.loc['-1.0']+(df_table_1.loc['-0.5']/2))
+            df_table_1.loc['Losing_Bets']=(df_table_1.loc[df_table_1.index.isin({'-1.0'})].sum(axis=0))+(df_table_1.loc[df_table_1.index.isin({'-0.5'})].sum(axis=0)/2)
+            # df_table_1.loc['No. of Bets Made'] = df_table_1.loc['1.0']+(df_table_1.loc['0.5']/2)+(df_table_1.loc['-0.5']/2) + df_table_1.loc['-1.0']
+            df_table_1.loc['No. of Bets Made'] = df_table_1.loc['Winning_Bets']+df_table_1.loc['Losing_Bets'] 
+            # df_table_1.loc['No. of Bets Made'] = df_table_1.loc[['1','-1']].sum() # No losing bets so far!!!
             # df_table_1.loc['% Winning'] = ((df_table_1.loc[1] / df_table_1.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
-            df_table_1.loc['% Winning'] = ((df_table_1.loc['1'] / df_table_1.loc['No. of Bets Made']))
+            df_table_1.loc['% Winning'] = (df_table_1.loc['Winning_Bets'] / (df_table_1.loc['Winning_Bets']+df_table_1.loc['Losing_Bets'])  ).replace({'<NA>':np.NaN})
+            # df_table_1.loc['% Winning'] = ((df_table_1.loc['1'] / df_table_1.loc['No. of Bets Made']))
         else:
             # st.write('Returning df with no analysis')
             return df_table_1
@@ -783,9 +789,15 @@ with placeholder_1.expander('Weekly Results'):
     df9['result']=df9['result'].round(1).astype(str)
     df9=df9.set_index('result').sort_index(ascending=False)
     df9['grand_total']=df9.sum(axis=1)
-    df9.loc['Winning_Bets']=(df9.loc['1.0'])
-    df9.loc['Losing_Bets']=(df9.loc['-1.0'])
-    df9.loc['No. of Bets Made'] = df9.loc['1.0']+ df9.loc['-1.0']
+    # df9.loc['TEST_Bets']=df9.loc[df9.index.isin({'1.0','0.5'})].sum(axis=0)
+    # df9.loc['TEST_TEST']=(df9.loc[df9.index.isin({'1.0'})].sum(axis=0))+(df9.loc[df9.index.isin({'0.5'})].sum(axis=0)/2)
+    # st.write('issue', df9)
+    # df9.loc['Winning_Bets']=(df9.loc['1.0']+(df9.loc['0.5']/2))
+    df9.loc['Winning_Bets']=(df9.loc[df9.index.isin({'1.0'})].sum(axis=0))+(df9.loc[df9.index.isin({'0.5'})].sum(axis=0)/2)
+    # df9.loc['Losing_Bets']=(df9.loc['-1.0']+(df9.loc['-0.5']/2))
+    df9.loc['Losing_Bets']=(df9.loc[df9.index.isin({'-1.0'})].sum(axis=0))+(df9.loc[df9.index.isin({'-0.5'})].sum(axis=0)/2)
+    df9.loc['No. of Bets Made'] = df9.loc['Winning_Bets']+df9.loc['Losing_Bets']
+    # df9.loc['No. of Bets Made'] = df9.loc['1.0']+(df9.loc['0.5']/2)+(df9.loc['-0.5']/2) + df9.loc['-1.0']
     df9.loc['PL_Bets']=df9.loc['Winning_Bets'] - df9.loc['Losing_Bets']
     df9=df9.apply(pd.to_numeric, downcast='float')
     graph_pl_data=df9.loc[['PL_Bets'],:].drop('grand_total',axis=1)
@@ -793,13 +805,17 @@ with placeholder_1.expander('Weekly Results'):
     graph_pl_data['Week']=graph_pl_data['Week'].astype(int)
     graph_pl_data['total_result']=graph_pl_data['week_result'].cumsum()
     graph_pl_data=graph_pl_data.melt(id_vars='Week',var_name='category',value_name='result')
-    df9.loc['% Winning'] = ((df9.loc['1.0']) / (df9.loc['1.0'] + df9.loc['-1.0']) ).replace({'<NA>':np.NaN})
+    # st.write('issue', df9)
+    df9.loc['% Winning'] = (df9.loc['Winning_Bets'] / (df9.loc['Winning_Bets']+df9.loc['Losing_Bets'])  ).replace({'<NA>':np.NaN})
+    # df9.loc['% Winning'] = ((df9.loc['1.0']+(df9.loc['0.5']/2)) / (df9.loc['1.0']+(df9.loc['0.5']/2)+(df9.loc['-0.5']/2) + df9.loc['-1.0']) ).replace({'<NA>':np.NaN})
     table_test=df9.copy()
     # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
     df9 = df9.style.format("{:.1f}", na_rep='-')
-    df9 = df9.format(formatter="{:.0%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
-        .format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
-        # .format(formatter="{:.0f}", subset=pd.IndexSlice[['-0.0'], :]) \
+    # st.write('this is df9', df9)
+    # df9 = df9.format(formatter="{:.0%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
+    #     .format(formatter="{:.0f}", subset=pd.IndexSlice[['0.0'], :]) \
+    #         .format(formatter="{:.0f}", subset=pd.IndexSlice[['-0.5'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
+            # .format(formatter="{:.0f}", subset=df9.index.isin({'0.5'})) \
 
     def graph_pl(decile_df_abs_home_1,column):
         line_cover= alt.Chart(decile_df_abs_home_1).mark_line().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
@@ -897,7 +913,9 @@ with st.expander('Analysis of Betting Results across 1 to 5 factors'):
     # st.write('test',reset_data)
     reset_data=reset_data.pivot(index='result_all',columns='total_factor',values='winning').fillna(0)
     # st.write('look',reset_data)
-    reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
+    dfBool=pd.Series(reset_data.columns.isin([3,4,5,6,7,8]) )
+    reset_data['betting_factor_total']=reset_data[reset_data.columns[dfBool]].sum(axis=1)
+    # reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
     reset_data=reset_data.sort_values(by='betting_factor_total',ascending=False)
 
     reset_data=reset_data.reset_index()
@@ -1218,9 +1236,15 @@ with st.expander('Checking Performance where Total Factor = 2 or 3:  Additional 
         # st.write('latest', df_factor_table_1.shape)
 
         if df_factor_table_1.shape > (2,7):
-            df_factor_table_1.loc['No. of Bets Made'] = df_factor_table_1.loc[['1','-1']].sum() 
-            df_factor_table_1.loc['% Winning'] = ((df_factor_table_1.loc['1'] / df_factor_table_1.loc['No. of Bets Made']))
-        # else:
+            df_factor_table_1.loc['Winning_Bets']=(df_factor_table_1.loc[df_factor_table_1.index.isin({'1.0'})].sum(axis=0))+(df_factor_table_1.loc[df_factor_table_1.index.isin({'0.5'})].sum(axis=0)/2)
+            # df_factor_table_1.loc['Losing_Bets']=(df_factor_table_1.loc['-1.0']+(df_factor_table_1.loc['-0.5']/2))
+            df_factor_table_1.loc['Losing_Bets']=(df_factor_table_1.loc[df_factor_table_1.index.isin({'-1.0'})].sum(axis=0))+(df_factor_table_1.loc[df_factor_table_1.index.isin({'-0.5'})].sum(axis=0)/2)
+            df_factor_table_1.loc['No. of Bets Made'] = df_factor_table_1.loc['Winning_Bets']+df_factor_table_1.loc['Losing_Bets']
+            
+            df_factor_table_1.loc['PL_Bets']=df_factor_table_1.loc['Winning_Bets'] - df_factor_table_1.loc['Losing_Bets']
+            df_factor_table_1=df_factor_table_1.apply(pd.to_numeric, downcast='float')
+            df_factor_table_1.loc['% Winning'] = (df_factor_table_1.loc['Winning_Bets'] / (df_factor_table_1.loc['Winning_Bets']+df_factor_table_1.loc['Losing_Bets'])  ).replace({'<NA>':np.NaN})
+
         #     # st.write('Returning df with no anal')
         return df_factor_table_1
 
