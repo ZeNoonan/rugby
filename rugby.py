@@ -17,7 +17,7 @@ placeholder_1=st.empty()
 placeholder_2=st.empty()
 
 # url='C:/Users/Darragh/Documents/Python/rugby/rugby.xlsx'
-url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
+# url = 'https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_results.csv'
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.xlsx')
 def csv_save(x):
@@ -40,7 +40,8 @@ data['Date']=pd.to_datetime(data[['year','month','day']])
 # st.write(data)
 
 # team_names_id=pd.read_excel(url,sheet_name='ID')
-team_names_id=pd.read_csv('https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_id.csv')
+# team_names_id=pd.read_csv('https://raw.githubusercontent.com/ZeNoonan/rugby/main/rugby_id.csv')
+team_names_id=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_id.csv')
 
 
 fb_ref_2020=pd.merge(data,team_names_id,on='Home Team').rename(columns={'ID':'Home ID'})
@@ -895,6 +896,7 @@ with placeholder_1.expander('Weekly Results'):
     #         .format(formatter="{:.0f}", subset=pd.IndexSlice[['-0.5'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
             # .format(formatter="{:.0f}", subset=df9.index.isin({'0.5'})) \
 
+
     def graph_pl(decile_df_abs_home_1,column):
         line_cover= alt.Chart(decile_df_abs_home_1).mark_line().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
         alt.Y(column),color=alt.Color('category'))
@@ -903,7 +905,8 @@ with placeholder_1.expander('Weekly Results'):
         vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=1).encode(y=column)
         return st.altair_chart(line_cover + text_cover + vline,use_container_width=True)
 
-    graph_pl(graph_pl_data,column='result')
+    st.write('graph pl data run graph after week 2 results are through', graph_pl_data.columns)
+    # graph_pl(graph_pl_data,column='result')
 
     st.write('Total betting result per Betting Table',betting_matches['result'].sum())
     st.write('Total betting result per Above Table',table_test.loc['PL_Bets','grand_total'])
