@@ -861,8 +861,8 @@ with st.expander('Analysis of Factors'):
 #     st.altair_chart(updated_test_chart,use_container_width=True)
 
 with placeholder_1.expander('Weekly Results'):
-    weekly_results=analysis.groupby(['Week','result']).agg(winning=('result','sum'),count=('result','count'))
-    weekly_test=analysis[analysis['total_factor'].abs()>2].loc[:,['Week','result']].copy()
+    weekly_results=analysis_factors.groupby(['Week','result']).agg(winning=('result','sum'),count=('result','count'))
+    weekly_test=analysis_factors[analysis_factors['total_factor'].abs()>2].loc[:,['Week','result']].copy()
     df9 = weekly_test.groupby(['result','Week']).size().unstack(fill_value=0)
     df9=df9.reset_index()
     df9['result']=df9['result'].round(1).astype(str)
@@ -880,7 +880,7 @@ with placeholder_1.expander('Weekly Results'):
     df9.loc['PL_Bets']=df9.loc['Winning_Bets'] - df9.loc['Losing_Bets']
     df9=df9.apply(pd.to_numeric, downcast='float')
     graph_pl_data=df9.loc[['PL_Bets'],:].drop('grand_total',axis=1)
-    graph_pl_data=graph_pl_data.stack().reset_index().rename(columns={0:'week_result'})
+    graph_pl_data=graph_pl_data.stack().reset_index().drop('result',axis=1).rename(columns={0:'week_result'})
     graph_pl_data['Week']=graph_pl_data['Week'].astype(int)
     graph_pl_data['total_result']=graph_pl_data['week_result'].cumsum()
     graph_pl_data=graph_pl_data.melt(id_vars='Week',var_name='category',value_name='result')
@@ -896,7 +896,6 @@ with placeholder_1.expander('Weekly Results'):
     #         .format(formatter="{:.0f}", subset=pd.IndexSlice[['-0.5'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
             # .format(formatter="{:.0f}", subset=df9.index.isin({'0.5'})) \
 
-
     def graph_pl(decile_df_abs_home_1,column):
         line_cover= alt.Chart(decile_df_abs_home_1).mark_line().encode(alt.X('Week:O',axis=alt.Axis(title='Week',labelAngle=0)),
         alt.Y(column),color=alt.Color('category'))
@@ -905,8 +904,7 @@ with placeholder_1.expander('Weekly Results'):
         vline = alt.Chart(overlay).mark_rule(color='black', strokeWidth=1).encode(y=column)
         return st.altair_chart(line_cover + text_cover + vline,use_container_width=True)
 
-    st.write('graph pl data run graph after week 2 results are through', graph_pl_data.columns)
-    # graph_pl(graph_pl_data,column='result')
+    graph_pl(graph_pl_data,column='result')
 
     st.write('Total betting result per Betting Table',betting_matches['result'].sum())
     st.write('Total betting result per Above Table',table_test.loc['PL_Bets','grand_total'])
