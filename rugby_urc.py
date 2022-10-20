@@ -6,11 +6,11 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=5
+finished_week=6
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 
-#  30 may backed highlanders +15.5 and hurricanes +2.5
+min_factor=2
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.xlsx')
 # id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
@@ -64,7 +64,7 @@ data['sin_bin']=data['yellow_card_home']-data['yellow_card_away']
 
 team_names_id=team_names_id.rename(columns={'Team':'Home Team'})
 # st.write('original team id',team_names_id)
-st.write('data before merge',data, 'team names before merge', team_names_id)
+# st.write('data before merge',data, 'team names before merge', team_names_id)
 fb_ref_2020=pd.merge(data,team_names_id,on='Home Team').rename(columns={'ID':'Home ID'})
 # st.write('after merge',fb_ref_2020)
 team_names_id_2=team_names_id.rename(columns={'Home Team':'Away Team'})
@@ -505,16 +505,17 @@ with placeholder_2.expander('Betting Slip Matches'):
         betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
         betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']+betting_matches['home_sin_bin_sign']+betting_matches['away_sin_bin_sign']
 
-        betting_matches['bet_on'] = np.where(betting_matches['total_factor']>2,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-2,betting_matches['Away Team'],''))
-        betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>2,1,np.where(betting_matches['total_factor']<-2,-1,0)))
+        betting_matches['bet_on'] = np.where(betting_matches['total_factor']>min_factor,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-min_factor,
+        betting_matches['Away Team'],''))
+        betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>min_factor,1,np.where(betting_matches['total_factor']<-min_factor,-1,0)))
         betting_matches['bet_sign'] = betting_matches['bet_sign'].astype(float)
         betting_matches['home_cover'] = betting_matches['home_cover'].astype(float)
         betting_matches['result']=betting_matches['home_cover_result'] * betting_matches['bet_sign']
-        st.write('testing sum of betting result',betting_matches['result'].sum())
+        # st.write('testing sum of betting result',betting_matches['result'].sum())
         # this is for graphing anlaysis on spreadsheet
         betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
         betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
-        st.write('testing sum of betting all result',betting_matches['result_all'].sum())
+        # st.write('testing sum of betting all result',betting_matches['result_all'].sum())
         cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
         cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
         betting_matches=betting_matches[cols]
@@ -527,15 +528,15 @@ with placeholder_2.expander('Betting Slip Matches'):
         betting_matches=updated_df.copy()
         betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
         betting_matches['away_cover_sign']+betting_matches['power_pick']
-        betting_matches['bet_on'] = np.where(betting_matches['total_factor']>2,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-2,betting_matches['Away Team'],''))
-        betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>2,1,np.where(betting_matches['total_factor']<-2,-1,0)))
+        betting_matches['bet_on'] = np.where(betting_matches['total_factor']>min_factor,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-min_factor,betting_matches['Away Team'],''))
+        betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>min_factor,1,np.where(betting_matches['total_factor']<-min_factor,-1,0)))
         betting_matches['bet_sign'] = betting_matches['bet_sign'].astype(float)
         betting_matches['home_cover'] = betting_matches['home_cover'].astype(float)
         betting_matches['result']=betting_matches['home_cover_result'] * betting_matches['bet_sign']
-        st.write('testing sum of betting result',betting_matches['result'].sum())
+        # st.write('testing sum of betting result',betting_matches['result'].sum())
         betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
         betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
-        st.write('testing sum of betting all result',betting_matches['result_all'].sum())
+        # st.write('testing sum of betting all result',betting_matches['result_all'].sum())
         cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
         cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
         betting_matches=betting_matches[cols]
