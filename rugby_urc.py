@@ -6,10 +6,10 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=6
+finished_week=8
 placeholder_1=st.empty()
 placeholder_2=st.empty()
-
+number_of_teams=16
 min_factor=2
 
 results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.xlsx')
@@ -310,14 +310,14 @@ last=list(range(0,(finished_week+1)))
 for first,last in zip(first,last):
     first_section=games_df[games_df['Week'].between(first,last)]
     full_game_matrix=games_matrix_workings(first_section)
-    adjusted_matrix=full_game_matrix.loc[0:10,0:10]
+    adjusted_matrix=full_game_matrix.loc[0:(number_of_teams-2),0:(number_of_teams-2)]
     df_inv = pd.DataFrame(np.linalg.pinv(adjusted_matrix.values), adjusted_matrix.columns, adjusted_matrix.index)
     power_df_week=power_df[power_df['Week']==last].drop_duplicates(subset=['ID'],keep='last').set_index('ID')\
-    .drop('Week',axis=1).rename(columns={'adj_spread':0}).loc[:10,:]
+    .drop('Week',axis=1).rename(columns={'adj_spread':0}).loc[:(number_of_teams-2),:]
     result = df_inv.dot(pd.DataFrame(power_df_week))
     result.columns=['power']
-    avg=(result['power'].sum())/12
-    result['avg_pwr_rank']=(result['power'].sum())/12
+    avg=(result['power'].sum())/number_of_teams
+    result['avg_pwr_rank']=(result['power'].sum())/number_of_teams
     result['final_power']=result['avg_pwr_rank']-result['power']
     df_pwr=pd.DataFrame(columns=['final_power'],data=[avg])
     result=pd.concat([result,df_pwr],ignore_index=True)
@@ -331,8 +331,12 @@ for first,last in zip(first,last):
 matches_df = spread.copy()
 home_power_rank_merge=power_ranking_combined.loc[:,['ID','week','final_power']].copy().rename(columns={'week':'Week','ID':'Home ID'})
 away_power_rank_merge=power_ranking_combined.loc[:,['ID','week','final_power']].copy().rename(columns={'week':'Week','ID':'Away ID'})
+# st.write('line 334 before merge', updated_df)
 updated_df=pd.merge(matches_df,home_power_rank_merge,on=['Home ID','Week']).rename(columns={'final_power':'home_power'})
+# st.write('line 336 before merge ALL OK here', updated_df)
+# st.write('away power rank merge on Away ID and Week', away_power_rank_merge)
 updated_df=pd.merge(updated_df,away_power_rank_merge,on=['Away ID','Week']).rename(columns={'final_power':'away_power'})
+# st.write('line 338 after merge', updated_df)
 updated_df['calculated_spread']=updated_df['away_power']-updated_df['home_power']
 updated_df['spread_working']=updated_df['home_power']-updated_df['away_power']+updated_df['Spread']
 updated_df['power_pick'] = np.where(updated_df['spread_working'] > 0, 1,
@@ -349,7 +353,9 @@ with st.expander('Season to Date Cover Factor by Team'):
     stdc_away=spread_3.rename(columns={'ID':'Away ID'})
     updated_df=updated_df.drop(['away_cover'],axis=1)
     updated_df=updated_df.rename(columns={'home_cover':'home_cover_result'})
+    st.write('line 352 before merge', updated_df)
     updated_df=updated_df.merge(stdc_home,on=['Date','Week','Home ID'],how='left').rename(columns={'cover':'home_cover','cover_sign':'home_cover_sign'})
+    st.write('line 354 after merge', updated_df)
     updated_df=pd.merge(updated_df,stdc_away,on=['Date','Week','Away ID'],how='left').rename(columns={'cover':'away_cover','cover_sign':'away_cover_sign'})
     updated_df_1=updated_df.copy()
     
@@ -404,7 +410,9 @@ with st.expander('Turnover Factor by Match Graph'):
 
     st.write('code below here has the updated df which feeds into the Betting Slip Tab')
     st.write('updated df_1 is just a copy of updated_df')
+    st.write('line 407 before function', updated_df)
     updated_df = turnover_data_prep_2(turnover_matches, updated_df)
+    # st.write('line 409 after function', updated_df)
     updated_df_intercept = turnover_data_prep_2(intercept_matches, updated_df_1)
     interecept_extract_to_merge=updated_df_intercept.loc[:,['Week','Home Team','Away Team','Spread','home_turnover_sign','away_turnover_sign']]\
     .rename(columns={'home_turnover_sign':'home_intercept_sign','away_turnover_sign':'away_intercept_sign'})
@@ -471,6 +479,7 @@ with st.expander('Penalty Factor by Match Graph'):
     # updated_df=penalty_df
 
 with placeholder_2.expander('Betting Slip Matches'):
+    # AgGrid(updated_df)
     updated_df=pd.merge(updated_df,interecept_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,sin_bin_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,penalty_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
@@ -554,7 +563,7 @@ with placeholder_2.expander('Betting Slip Matches'):
     presentation_betting_matches=betting_matches.copy()
 
     # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
-    grid_height = st.number_input("Grid height", min_value=400, value=550, step=100)
+    grid_height = st.number_input("Grid height", min_value=400, value=850, step=100)
     gb = GridOptionsBuilder.from_dataframe(presentation_betting_matches)
     gb.configure_column("Spread", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
     gb.configure_column("home_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
