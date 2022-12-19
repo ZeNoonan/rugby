@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 # st.write(x)
 
 finished_week=28
-number_of_teams=13
+number_of_teams=8
 # 31 May all backed now
 
 home_advantage=3
