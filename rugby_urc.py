@@ -6,7 +6,7 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=8
+finished_week=10
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 number_of_teams=16
@@ -563,7 +563,7 @@ with placeholder_2.expander('Betting Slip Matches'):
     presentation_betting_matches=betting_matches.copy()
 
     # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
-    grid_height = st.number_input("Grid height", min_value=400, value=1850, step=100)
+    grid_height = st.number_input("Grid height", min_value=400, value=2850, step=100)
     gb = GridOptionsBuilder.from_dataframe(presentation_betting_matches)
     gb.configure_column("Spread", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
     gb.configure_column("home_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
