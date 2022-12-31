@@ -6,7 +6,7 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=10
+finished_week=11
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 number_of_teams=16
