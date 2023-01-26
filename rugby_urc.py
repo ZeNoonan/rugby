@@ -353,9 +353,9 @@ with st.expander('Season to Date Cover Factor by Team'):
     stdc_away=spread_3.rename(columns={'ID':'Away ID'})
     updated_df=updated_df.drop(['away_cover'],axis=1)
     updated_df=updated_df.rename(columns={'home_cover':'home_cover_result'})
-    st.write('line 352 before merge', updated_df)
+    # st.write('line 352 before merge', updated_df)
     updated_df=updated_df.merge(stdc_home,on=['Date','Week','Home ID'],how='left').rename(columns={'cover':'home_cover','cover_sign':'home_cover_sign'})
-    st.write('line 354 after merge', updated_df)
+    # st.write('line 354 after merge', updated_df)
     updated_df=pd.merge(updated_df,stdc_away,on=['Date','Week','Away ID'],how='left').rename(columns={'cover':'away_cover','cover_sign':'away_cover_sign'})
     updated_df_1=updated_df.copy()
     
@@ -478,11 +478,25 @@ with st.expander('Penalty Factor by Match Graph'):
     # st.write(updated_df)
     # updated_df=penalty_df
 
+# with st.expander('Momentum Factor'):
+    
+#     updated_df_with_momentum=updated_df.loc[:,['Week','Date','Home ID','Home Team','Away ID', 'Away Team','Spread','Home Points','Away Points',
+#         'home_power','away_power','home_cover','away_cover','home_turnover_sign','away_turnover_sign',
+#         'home_cover_sign','away_cover_sign','power_pick','home_cover_result','Opening Spread']]
+#     # st.write('update', updated_df_with_momentum)
+#     updated_df_with_momentum['momentum_pick']=np.where(updated_df_with_momentum['Spread']==updated_df_with_momentum['Opening Spread'],0,np.where(
+#         updated_df_with_momentum['Spread']<updated_df_with_momentum['Opening Spread'],1,-1))
+
+
+
 with placeholder_2.expander('Betting Slip Matches'):
     # AgGrid(updated_df)
     updated_df=pd.merge(updated_df,interecept_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,sin_bin_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,penalty_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
+    updated_df['momentum_pick']=np.where(updated_df['Spread']==updated_df['Opening Spread'],0,np.where(
+    updated_df['Spread']<updated_df['Opening Spread'],1,-1))
+
     # AgGrid(updated_df)
     # st.write('updated df', updated_df)
 
@@ -499,20 +513,20 @@ with placeholder_2.expander('Betting Slip Matches'):
         # 'home_cover_sign','away_cover_sign','power_pick','home_cover_result','home_penalty_sign','away_penalty_sign',
         # 'home_intercept_sign','away_intercept_sign','home_sin_bin_sign','away_sin_bin_sign']]
         
-        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
-        # betting_matches['away_cover_sign']+betting_matches['power_pick']
+        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        betting_matches['away_cover_sign']+betting_matches['power_pick']+updated_df['momentum_pick']
 
         # # below is using the intercept as well
         # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
         # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']
 
-        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
-        betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
-        betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']
+        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
+        # betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']
 
-        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
-        betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
-        betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']+betting_matches['home_sin_bin_sign']+betting_matches['away_sin_bin_sign']
+        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
+        # betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']+betting_matches['home_sin_bin_sign']+betting_matches['away_sin_bin_sign']
 
         betting_matches['bet_on'] = np.where(betting_matches['total_factor']>min_factor,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-min_factor,
         betting_matches['Away Team'],''))
