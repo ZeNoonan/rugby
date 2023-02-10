@@ -6,14 +6,33 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
+season_picker = st.selectbox("Select a season to run",('season_2023','season_2022'),index=1)
 finished_week=16
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 
-#  30 may backed highlanders +15.5 and hurricanes +2.5
 
-results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby.xlsx')
-id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
+season_list={'season_2023': {
+    "odds_file": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_2023.csv",
+    "scores_file": "C:/Users/Darragh/Documents/Python/premier_league/scores_2022_2023.csv",
+    "team_id": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.csv",
+    "season_year": "2023",
+    "prior_year_file": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_2022.csv"},
+'season_2022': {
+    "odds_file": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_2022.csv",
+    "scores_file": "C:/Users/Darragh/Documents/Python/premier_league/scores_2022_2023.csv",
+    "team_id": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.csv",
+    "season_year": "2022",
+    "prior_year_file": "C:/Users/Darragh/Documents/Python/premier_league/prior_premier_league_odds_2021_2022.csv"}}
+
+year=season_list[season_picker]['season_year']
+# results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby.xlsx')
+results_excel = pd.read_excel(f'C:/Users/Darragh/Documents/Python/rugby/super_rugby_{year}.xlsx',parse_dates=['Date']) # 2023
+results_excel.to_csv(f'C:/Users/Darragh/Documents/Python/rugby/super_rugby_{year}.csv')
+data = pd.read_csv(season_list[season_picker]['odds_file'],parse_dates=['Date'])
+
+# pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx').to_csv("C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.csv")
+team_names_id=pd.read_csv(season_list[season_picker]['team_id'])
 
 def csv_save(x):
     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/super_rugby.csv')
@@ -28,48 +47,27 @@ def read_csv_data(file):
 def read_csv_data_date(file):
     return pd.read_csv(file,parse_dates=['Date'])
 
+# team_names_id = id_excel
+# local='C:/Users/Darragh/Documents/Python/rugby/super_rugby.csv'
+# data=(read_csv_data_date(local)).copy()
 
-
-
-# url = read_csv_data('https://raw.githubusercontent.com/ZeNoonan/nrl/main/nrl_data.csv').copy()
-# url = 'https://raw.githubusercontent.com/ZeNoonan/nrl/main/nrl_data.csv'
-# https://www.aussportsbetting.com/data/historical-nfl-results-and-odds-data/
-# team_names_id = read_csv_data('https://raw.githubusercontent.com/ZeNoonan/nrl/main/nrl_team_id.csv').copy()
-# team_names_id = (read_csv_data('C:/Users/Darragh/Documents/Python/nrl/nrl_team_id.csv')).drop(['Unnamed: 0'],axis=1).copy()
-team_names_id = id_excel
-# st.write(team_names_id)
-# st.write(pd.read_csv(url))
-# data=pd.read_csv(url,parse_dates=['Date'])
-
-local='C:/Users/Darragh/Documents/Python/rugby/super_rugby.csv'
-
-# data=pd.read_csv(local,parse_dates=['Date'])
-data=(read_csv_data_date(local)).copy()
-# data=pd.read_csv(url,parse_dates=['Date'])
-# st.write('data',data)
-
-# data['Date']=pd.to_datetime(data['Date'],errors='coerce')
 data['year']=data['Date'].dt.year
 data['month']=data['Date'].dt.month
 data['day']=data['Date'].dt.day
 data=data.drop(['Date','Unnamed: 0'],axis=1)
 data['Date']=pd.to_datetime(data[['year','month','day']])
-data['Week'] = data['Week'].replace({'Finals':26})
+# st.write('data', data)
+data['Week'] = data['Week'].replace({'Finals':26}) # dont get this
 data['Week']=pd.to_numeric(data['Week'])
 team_names_id=team_names_id.rename(columns={'Team':'Home Team'})
-# st.write('original team id',team_names_id)
-# st.write(data)
 fb_ref_2020=pd.merge(data,team_names_id,on='Home Team').rename(columns={'ID':'Home ID'})
-# st.write('after merge',fb_ref_2020)
 team_names_id_2=team_names_id.rename(columns={'Home Team':'Away Team'})
-# st.write('team id 2',team_names_id_2)
 data=pd.merge(fb_ref_2020,team_names_id_2,on='Away Team').rename(columns={'ID':'Away ID','Home Score':'Home Points',
 'Away Score':'Away Points','Home Line Close':'Spread'})
 cols_to_move=['Week','Date','Home ID','Home Team','Away ID','Away Team','Spread']
 cols = cols_to_move + [col for col in data if col not in cols_to_move]
 data=data[cols]
 
-# st.write('checking data', data.sort_values(by='Week'))
 
 def spread_workings(data):
     data['home_win']=data['Home Points'] - data['Away Points']
