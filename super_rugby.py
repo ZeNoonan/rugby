@@ -6,7 +6,7 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-season_picker = st.selectbox("Select a season to run",('season_2023','season_2022'),index=1)
+season_picker = st.selectbox("Select a season to run",('season_2023','season_2022'),index=0)
 finished_week=16
 placeholder_1=st.empty()
 placeholder_2=st.empty()
@@ -34,10 +34,10 @@ data = pd.read_csv(season_list[season_picker]['odds_file'],parse_dates=['Date'])
 # pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx').to_csv("C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.csv")
 team_names_id=pd.read_csv(season_list[season_picker]['team_id'])
 
-def csv_save(x):
-    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/super_rugby.csv')
-    return x
-csv_save(results_excel) #####################
+# def csv_save(x):
+#     x.to_csv('C:/Users/Darragh/Documents/Python/rugby/super_rugby.csv')
+#     return x
+# csv_save(results_excel) #####################
 
 @st.cache
 def read_csv_data(file):
@@ -456,6 +456,8 @@ with placeholder_2.expander('Betting Slip Matches'):
     updated_df=pd.merge(updated_df,interecept_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,sin_bin_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,penalty_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
+    updated_df['momentum_pick']=np.where(updated_df['Spread']==updated_df['Opening Spread'],0,np.where(
+    updated_df['Spread']<updated_df['Opening Spread'],1,-1))
     # AgGrid(updated_df)
     # st.write('updated df', updated_df)
 
@@ -472,31 +474,31 @@ with placeholder_2.expander('Betting Slip Matches'):
         # 'home_cover_sign','away_cover_sign','power_pick','home_cover_result','home_penalty_sign','away_penalty_sign',
         # 'home_intercept_sign','away_intercept_sign','home_sin_bin_sign','away_sin_bin_sign']]
         
-        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
-        # betting_matches['away_cover_sign']+betting_matches['power_pick']
+        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        betting_matches['away_cover_sign']+betting_matches['power_pick']+updated_df['momentum_pick']
 
         # # below is using the intercept as well
         # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
         # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']
 
-        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
-        betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
-        betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']
+        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
+        # betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']+updated_df['momentum_pick']
 
-        betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
-        betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
-        betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']+betting_matches['home_sin_bin_sign']+betting_matches['away_sin_bin_sign']
+        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']+\
+        # betting_matches['home_penalty_sign']+betting_matches['away_penalty_sign']+betting_matches['home_sin_bin_sign']+betting_matches['away_sin_bin_sign']
 
         betting_matches['bet_on'] = np.where(betting_matches['total_factor']>2,betting_matches['Home Team'],np.where(betting_matches['total_factor']<-2,betting_matches['Away Team'],''))
         betting_matches['bet_sign'] = (np.where(betting_matches['total_factor']>2,1,np.where(betting_matches['total_factor']<-2,-1,0)))
         betting_matches['bet_sign'] = betting_matches['bet_sign'].astype(float)
         betting_matches['home_cover'] = betting_matches['home_cover'].astype(float)
         betting_matches['result']=betting_matches['home_cover_result'] * betting_matches['bet_sign']
-        st.write('testing sum of betting result',betting_matches['result'].sum())
+        # st.write('testing sum of betting result',betting_matches['result'].sum())
         # this is for graphing anlaysis on spreadsheet
         betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
         betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
-        st.write('testing sum of betting all result',betting_matches['result_all'].sum())
+        # st.write('testing sum of betting all result',betting_matches['result_all'].sum())
         cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
         cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
         betting_matches=betting_matches[cols]
@@ -514,10 +516,10 @@ with placeholder_2.expander('Betting Slip Matches'):
         betting_matches['bet_sign'] = betting_matches['bet_sign'].astype(float)
         betting_matches['home_cover'] = betting_matches['home_cover'].astype(float)
         betting_matches['result']=betting_matches['home_cover_result'] * betting_matches['bet_sign']
-        st.write('testing sum of betting result',betting_matches['result'].sum())
+        # st.write('testing sum of betting result',betting_matches['result'].sum())
         betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
         betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
-        st.write('testing sum of betting all result',betting_matches['result_all'].sum())
+        # st.write('testing sum of betting all result',betting_matches['result_all'].sum())
         cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
         cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
         betting_matches=betting_matches[cols]
@@ -879,7 +881,9 @@ with st.expander('Analysis of Betting Results across 1 to 5 factors'):
     # st.write('test',reset_data)
     reset_data=reset_data.pivot(index='result_all',columns='total_factor',values='winning').fillna(0)
     # st.write('look',reset_data)
-    reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
+    dfBool=pd.Series(reset_data.columns.isin([3,4,5]) )
+    reset_data['betting_factor_total']=reset_data[reset_data.columns[dfBool]].sum(axis=1)
+    # reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
     reset_data=reset_data.sort_values(by='betting_factor_total',ascending=False)
 
     reset_data=reset_data.reset_index()
@@ -915,6 +919,7 @@ with st.expander('Analysis of Betting Results across 1 to 5 factors'):
     # st.write('sum of winning column should be 267 I think',totals_1['winning'].sum())
     # st.write('count of week column should be 267',analysis['Week'].count())
 
+
 with st.expander('Betting Result'):
     reset_data=totals_1.copy()
     def run_result(reset_data):
@@ -933,10 +938,12 @@ with st.expander('Betting Result'):
         # st.write('working???',reset_data)
         reset_data.loc['Total']=reset_data.sum()
         # reset_data.loc['No. of Bets Made'] = reset_data.loc[[1,-1]].sum()
-        reset_data.loc['No. of Bets Made'] = reset_data.loc[['1','-1']].sum()
+        reset_data.loc['No. of Bets Made']=(reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0))+(reset_data.loc[reset_data.index.isin({'-1'})].sum(axis=0))
+        # reset_data.loc['No. of Bets Made'] = reset_data.loc[['1','-1']].sum()
         reset_data=reset_data.apply(pd.to_numeric, downcast='integer')
         # reset_data.loc['% Winning'] = ((reset_data.loc[1] / reset_data.loc['No. of Bets Made'])*100).apply('{:,.1f}%'.format)
-        reset_data.loc['% Winning'] = ((reset_data.loc['1'] / reset_data.loc['No. of Bets Made']))
+        reset_data.loc['% Winning'] = ((reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0) / reset_data.loc['No. of Bets Made'])).replace({'<NA>':np.NaN})
+        # reset_data.loc['% Winning'] = ((reset_data.loc['1'] / reset_data.loc['No. of Bets Made']))
         reorder_list=['1','-1','0','Total','No. of Bets Made','% Winning']
         reset_data=reset_data.reindex(reorder_list)
 
@@ -1059,6 +1066,37 @@ with st.expander('Betting Result'):
 #     st.altair_chart(updated_test_chart,use_container_width=True)
 
 with placeholder_1.expander('Weekly Results'):
+    # weekly_results=analysis.groupby(['Week','result']).agg(winning=('result','sum'),count=('result','count'))
+    # weekly_test=analysis[analysis['total_factor'].abs()>2].loc[:,['Week','result']].copy()
+
+    # df9 = weekly_test.groupby(['result','Week']).size().unstack(fill_value=0)
+    # df9=df9.reset_index()
+    # df9['result']=df9['result'].astype(int).astype(str)
+    # df9=df9.set_index('result').sort_index(ascending=False)
+    # # df9.columns = df9.columns.astype(str)
+    # # df_slice=df9.loc[:,13:]
+    # # df9['subtotal_week_13_on']=df_slice.sum(axis=1)
+    # # df_all=df9.iloc[:,:-1]
+    # # st.write('this is df all',df_all)
+    # # df9['grand_total']=df_all.sum(axis=1)
+    # df9['grand_total']=df9.iloc[:,:-1].sum(axis=1)
+    # df9.loc['Total']=df9.sum()
+    # df9.loc['No. of Bets Made'] = df9.loc[['1','-1']].sum() 
+    # df9=df9.apply(pd.to_numeric, downcast='integer')
+    # df9.loc['% Winning'] = ((df9.loc['1'] / df9.loc['No. of Bets Made'])).replace({'<NA>':np.NaN})
+
+    # # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
+    # df9 = df9.style.format("{:.0f}", na_rep='-')
+    # df9 = df9.format(formatter="{:.0%}", subset=pd.IndexSlice[['% Winning'], :])
+    # st.write(df9)
+
+    # st.write('Total betting result',betting_matches['result'].sum())
+    # pivot_weekly.columns = pivot_weekly.columns.droplevel(0)
+    # weekly_test=analysis.groupby([(analysis['total_factor'].abs()>2),'result_all']).agg(winning=('result_all','count'))
+    # st.write(pivot_weekly)
+    # st.write(weekly_test)
+    # --------------------------------------------------------------------------------------------------------------------------
+
     weekly_results=analysis.groupby(['Week','result']).agg(winning=('result','sum'),count=('result','count'))
     weekly_test=analysis[analysis['total_factor'].abs()>2].loc[:,['Week','result']].copy()
     df9 = weekly_test.groupby(['result','Week']).size().unstack(fill_value=0)
@@ -1066,9 +1104,9 @@ with placeholder_1.expander('Weekly Results'):
     df9['result']=df9['result'].round(1).astype(str)
     df9=df9.set_index('result').sort_index(ascending=False)
     df9['grand_total']=df9.sum(axis=1)
-    df9.loc['Winning_Bets']=(df9.loc['1.0'])
-    df9.loc['Losing_Bets']=(df9.loc['-1.0'])
-    df9.loc['No. of Bets Made'] = df9.loc['1.0']+ df9.loc['-1.0']
+    df9.loc['Winning_Bets']=(df9.loc[df9.index.isin({'1.0','1'})].sum(axis=0))
+    df9.loc['Losing_Bets']=(df9.loc[df9.index.isin({'-1','-1.0'})].sum(axis=0))
+    df9.loc['No. of Bets Made'] = df9.loc['Winning_Bets']+ df9.loc['Losing_Bets']
     df9.loc['PL_Bets']=df9.loc['Winning_Bets'] - df9.loc['Losing_Bets']
     df9=df9.apply(pd.to_numeric, downcast='float')
     graph_pl_data=df9.loc[['PL_Bets'],:].drop('grand_total',axis=1)
@@ -1076,12 +1114,12 @@ with placeholder_1.expander('Weekly Results'):
     graph_pl_data['Week']=graph_pl_data['Week'].astype(int)
     graph_pl_data['total_result']=graph_pl_data['week_result'].cumsum()
     graph_pl_data=graph_pl_data.melt(id_vars='Week',var_name='category',value_name='result')
-    df9.loc['% Winning'] = ((df9.loc['1.0']) / (df9.loc['1.0'] + df9.loc['-1.0']) ).replace({'<NA>':np.NaN})
+    df9.loc['% Winning'] = (df9.loc['Winning_Bets'] / (df9.loc['Winning_Bets']+df9.loc['Losing_Bets'])  ).replace({'<NA>':np.NaN})
     table_test=df9.copy()
     # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
     df9 = df9.style.format("{:.1f}", na_rep='-')
-    df9 = df9.format(formatter="{:.0%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
-        .format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
+    # df9 = df9.format(formatter="{:.0%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
+    #     .format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
         # .format(formatter="{:.0f}", subset=pd.IndexSlice[['-0.0'], :]) \
 
     def graph_pl(decile_df_abs_home_1,column):
