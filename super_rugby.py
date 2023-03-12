@@ -537,7 +537,7 @@ with placeholder_2.expander('Betting Slip Matches'):
     presentation_betting_matches=betting_matches.copy()
 
     # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
-    grid_height = st.number_input("Grid height", min_value=400, value=550, step=100)
+    grid_height = st.number_input("Grid height", min_value=400, value=1550, step=100)
     gb = GridOptionsBuilder.from_dataframe(presentation_betting_matches)
     gb.configure_column("Spread", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
     gb.configure_column("home_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
@@ -926,7 +926,9 @@ with st.expander('Betting Result'):
         # reset_data['result_all']=reset_data['result_all'].replace({'tie':0,'win':1,'lose':-1})
         reset_data['result_all']=reset_data['result_all'].replace({'tie':'0','win':'1','lose':'-1'})
         reset_data=reset_data.pivot(index='result_all',columns='total_factor',values='winning').fillna(0)
+        st.write('check this factor 3 is an issue??', reset_data)
         reset_data=reset_data.rename(columns={3:'factor_3',4:'factor_4',5:'factor_5'})
+        st.write('check this factor 3 is an issue??', reset_data)
         # st.write(reset_data.loc[:,'factor_3':])
         # sum_cols=reset_data.loc[:,reset_data.columns.isin(['factor_3','factor_4','factor_5'])]
         # st.write('inside function',  )
