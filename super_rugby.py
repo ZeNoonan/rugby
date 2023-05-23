@@ -20,7 +20,7 @@ season_list={'season_2023': {
     "prior_year_file": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_2022.csv"},
 'season_2022': {
     "odds_file": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_2022.csv",
-    "scores_file": "C:/Users/Darragh/Documents/Python/premier_league/scores_2022_2023.csv",
+    "scores_file": "C:/Users/Darragh/Documents/Python/premier_league/scores_2022.csv",
     "team_id": "C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.csv",
     "season_year": "2022",
     "prior_year_file": "C:/Users/Darragh/Documents/Python/premier_league/prior_premier_league_odds_2021_2022.csv"}}
