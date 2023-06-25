@@ -7,7 +7,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataRe
 
 st.set_page_config(layout="wide")
 season_picker = st.selectbox("Select a season to run",('season_2023','season_2022'),index=0)
-finished_week=16
+finished_week=17
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 
