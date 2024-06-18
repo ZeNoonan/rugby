@@ -6,26 +6,27 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=20
+finished_week=19
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 number_of_teams=17
 min_factor=2
 
-results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.xlsx')
+results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2023_2024.xlsx')
+
 # id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
 
 def csv_save(x):
-    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.csv')
+    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2023_2024.csv')
     return x
 csv_save(results_excel)
 
 
-@st.cache
+@st.cache_data
 def read_csv_data(file):
     return pd.read_csv(file)
 
-@st.cache
+@st.cache_data
 def read_csv_data_date(file):
     return pd.read_csv(file,parse_dates=['Date'])
 
@@ -43,7 +44,7 @@ team_names_id=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_id.csv'
 # st.write(pd.read_csv(url))
 # data=pd.read_csv(url,parse_dates=['Date'])
 
-local='C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2022_2023.csv'
+local='C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2023_2024.csv'
 
 # data=pd.read_csv(local,parse_dates=['Date'])
 data=(read_csv_data_date(local)).copy()
@@ -188,12 +189,25 @@ def season_cover_workings(data,home,away,name,week_start):
     # drop('variable',axis=1).reset_index().sort_values(by=['Week','ID'],ascending=True)
     return season_cover.sort_values(by=['Week','Date','ID'],ascending=[True,True,True])
 
-def season_cover_2(season_cover_df,column_name):    
-    # https://stackoverflow.com/questions/54993050/pandas-groupby-shift-and-cumulative-sum
-    # season_cover_df[column_name] = season_cover_df.groupby (['ID'])[column_name].transform(lambda x: x.cumsum().shift())
-    # THE ABOVE DIDN'T WORK IN 2020 PRO FOOTBALL BUT DID WORK IN 2019 DO NOT DELETE FOR INFO PURPOSES
-    season_cover_df[column_name] = season_cover_df.groupby (['ID'])[column_name].apply(lambda x: x.cumsum().shift())
-    season_cover_df=season_cover_df.reset_index().sort_values(by=['Week','Date','ID'],ascending=True).drop('index',axis=1)
+# def season_cover_2(season_cover_df,column_name):    
+#     # https://stackoverflow.com/questions/54993050/pandas-groupby-shift-and-cumulative-sum
+#     # season_cover_df[column_name] = season_cover_df.groupby (['ID'])[column_name].transform(lambda x: x.cumsum().shift())
+#     # THE ABOVE DIDN'T WORK IN 2020 PRO FOOTBALL BUT DID WORK IN 2019 DO NOT DELETE FOR INFO PURPOSES
+#     season_cover_df.loc[column_name] = season_cover_df.groupby (['ID'])[column_name].apply(lambda x: x.cumsum().shift())
+#     season_cover_df=season_cover_df.reset_index().sort_values(by=['Week','Date','ID'],ascending=True).drop('index',axis=1)
+#     # Be careful with this if you want full season, season to date cover, for week 17, it is season to date up to week 16
+#     # if you want full season, you have to go up to week 18 to get the full 17 weeks, just if you want to do analysis on season covers
+#     return season_cover_df
+
+def season_cover_2(spead_1):  
+    x=spread_1.groupby (['ID'])['cover'].apply(lambda x: x.cumsum().shift()).reset_index().rename(columns={'level_1':'unique_id'})
+    # st.write('in function and applying shift',x)
+    y=spread_1.drop('cover',axis=1).reset_index().rename(columns={'index':'unique_id'})
+    # st.write('dropping cover in function',y.reset_index().rename(columns={'index':'unique_id'}))
+    # st.write('dropping cover in function',y)
+    season_cover_df=pd.merge(x,y,how='outer',on=['unique_id','ID'])
+    # st.write('after merge', season_cover_df)
+    season_cover_df=season_cover_df.reset_index().sort_values(by=['Week','Date','ID'],ascending=True).drop(['index','unique_id'],axis=1)
     # Be careful with this if you want full season, season to date cover, for week 17, it is season to date up to week 16
     # if you want full season, you have to go up to week 18 to get the full 17 weeks, just if you want to do analysis on season covers
     return season_cover_df
@@ -202,7 +216,7 @@ spread=spread_workings(data)
 
 # with st.beta_expander('Season to date Cover'):
 spread_1 = season_cover_workings(spread,'home_cover','away_cover','cover',0)
-spread_2=season_cover_2(spread_1,'cover')
+spread_2=season_cover_2(spread_1)
 spread_3=season_cover_3(spread_2,'cover_sign','cover')
 
 matrix_df=spread_workings(data)
@@ -516,6 +530,12 @@ with placeholder_2.expander('Betting Slip Matches'):
         betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
         betting_matches['away_cover_sign']+betting_matches['power_pick']+updated_df['momentum_pick']
 
+        # use this for without momenutm
+
+
+        # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
+        # betting_matches['away_cover_sign']+betting_matches['power_pick']
+
         # # below is using the intercept as well
         # betting_matches['total_factor']=betting_matches['home_turnover_sign']+betting_matches['away_turnover_sign']+betting_matches['home_cover_sign']+\
         # betting_matches['away_cover_sign']+betting_matches['power_pick']+betting_matches['home_intercept_sign']+betting_matches['away_intercept_sign']
@@ -539,7 +559,9 @@ with placeholder_2.expander('Betting Slip Matches'):
         betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
         betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
         # st.write('testing sum of betting all result',betting_matches['result_all'].sum())
-        cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
+        cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points',
+                      'power_pick','home_cover','away_cover',
+                      'home_turnover_sign','away_turnover_sign','momentum_pick','home_cover_sign','away_cover_sign','home_power','away_power']
         cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
         betting_matches=betting_matches[cols]
         betting_matches=betting_matches.sort_values(['Week','Date'],ascending=[True,True])
@@ -560,7 +582,9 @@ with placeholder_2.expander('Betting Slip Matches'):
         betting_matches['bet_sign_all'] = (np.where(betting_matches['total_factor']>0,1,np.where(betting_matches['total_factor']<-0,-1,0)))
         betting_matches['result_all']=betting_matches['home_cover_result'] * betting_matches['bet_sign_all']
         # st.write('testing sum of betting all result',betting_matches['result_all'].sum())
-        cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power']
+        cols_to_move=['Week','Date','Home Team','Away Team','total_factor','bet_on','result','Spread','Home Points','Away Points','home_power','away_power',
+                      'calculated_spread','power_pick',
+                      'home_cover_sign','home_cover','away_cover_sign','away_cover','home_turnover_sign','away_turnover_sign']
         cols = cols_to_move + [col for col in betting_matches if col not in cols_to_move]
         betting_matches=betting_matches[cols]
         betting_matches=betting_matches.sort_values(['Week','Date'],ascending=[True,True])
@@ -571,13 +595,35 @@ with placeholder_2.expander('Betting Slip Matches'):
     betting_matches_sin_bin=run_analysis_factors(updated_df_sin_bin)
     betting_matches=run_analysis(updated_df)
 
+    # https://stackoverflow.com/questions/68056855/pandas-style-conditional-formatting-highlight-on-text
+    def color_recommend(value):
+        if value == -1:
+            color = 'red'
+        elif value == 1:
+            color = 'green'
+        else:
+            return
+        return f'background-color: {color}'
 
+    df_extract=betting_matches.loc[:,['Week','Date','Home Team','Away Team','total_factor','bet_on','Spread','Opening Spread','power_pick','home_cover','away_cover',
+                      'home_turnover_sign','away_turnover_sign','momentum_pick']].set_index(['Date','Home Team','Away Team','total_factor','bet_on','Spread','Opening Spread'])
+    
+    st.write(df_extract.loc[df_extract['Week']==(finished_week+1)].reset_index().set_index(['Week','Date','Home Team','Away Team','total_factor','bet_on','Spread','Opening Spread']).style.format({'home_power':"{:.1f}",'away_power':"{:.1f}",'result':"{:.0f}",'Home Points':"{:.0f}",'Date':"{:%d.%m.%Y}",
+                                           'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover':"{:.0f}",'away_cover':"{:.0f}",
+                                           'calculated_spread':"{:.1f}",'Spread':"{:.1f}"}).applymap(color_recommend) )
 
+    st.write(betting_matches[betting_matches['Week']==(finished_week+1)].set_index('Week').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}",'result':"{:.0f}",'Home Points':"{:.0f}",'Date':"{:%d.%m.%Y}",
+                                           'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover':"{:.0f}",'away_cover':"{:.0f}",
+                                           'calculated_spread':"{:.1f}",'Spread':"{:.1f}"}))
+
+    st.write(betting_matches[betting_matches['Week']==(finished_week)].set_index('Week').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}",'result':"{:.0f}",'Home Points':"{:.0f}",'Date':"{:%d.%m.%Y}",
+                                           'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover':"{:.0f}",'away_cover':"{:.0f}",
+                                           'calculated_spread':"{:.1f}",'Spread':"{:.1f}"}))
 
     presentation_betting_matches=betting_matches.copy()
 
     # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
-    grid_height = st.number_input("Grid height", min_value=400, value=4850, step=100)
+    grid_height = st.number_input("Grid height", min_value=400, value=850, step=100)
     gb = GridOptionsBuilder.from_dataframe(presentation_betting_matches)
     gb.configure_column("Spread", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
     gb.configure_column("home_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
@@ -703,11 +749,12 @@ with st.expander('Analysis of Factors'):
         analysis_factors.loc[:,['home_cover_season_success?']] = analysis_factors['home_cover_sign'] * analysis_factors['home_cover_result']  
         analysis_factors.loc[:,['away_cover_season_success?']] = analysis_factors['away_cover_sign'] * analysis_factors['home_cover_result']
         analysis_factors.loc[:,['power_ranking_success?']] = analysis_factors['power_pick'] * analysis_factors['home_cover_result']
-        df_table = analysis_factors['home_turnover_success?'].value_counts()
-        away_turnover=analysis_factors['away_turnover_success?'].value_counts()
-        home_cover=analysis_factors['home_cover_season_success?'].value_counts()
-        away_cover=analysis_factors['away_cover_season_success?'].value_counts()
-        power=analysis_factors['power_ranking_success?'].value_counts()
+
+        df_table = analysis_factors['home_turnover_success?'].value_counts().reset_index().rename(columns={'home_turnover_success?':'factor','count':'home_turnover_success?'}).set_index('factor')
+        away_turnover=analysis_factors['away_turnover_success?'].value_counts().reset_index().rename(columns={'away_turnover_success?':'factor','count':'away_turnover_success?'}).set_index('factor')
+        home_cover=analysis_factors['home_cover_season_success?'].value_counts().reset_index().rename(columns={'home_cover_season_success?':'factor','count':'home_cover_season_success?'}).set_index('factor')
+        away_cover=analysis_factors['away_cover_season_success?'].value_counts().reset_index().rename(columns={'away_cover_season_success?':'factor','count':'away_cover_season_success?'}).set_index('factor')
+        power=analysis_factors['power_ranking_success?'].value_counts().reset_index().rename(columns={'power_ranking_success?':'factor','count':'power_ranking_success?'}).set_index('factor')
         df_table_1=pd.concat([df_table,away_turnover,home_cover,away_cover,power],axis=1)
         # df_table_1=pd.concat([df_table,away_turnover,home_cover,away_cover,power],axis=1).reset_index().drop('index',axis=1)
         # st.write('df table', df_table_1)
@@ -718,10 +765,11 @@ with st.expander('Analysis of Factors'):
         df_table_1['total_season_cover'] = df_table_1['home_cover_season_success?'] + df_table_1['away_cover_season_success?']
         
         df_table_1=df_table_1.reset_index()
-        df_table_1['index']=df_table_1['index'].astype(str)
+        df_table_1['index']=df_table_1['factor'].astype(str)
+        df_table_1=df_table_1.drop('factor',axis=1)
         df_table_1=df_table_1.set_index('index')
-        # st.write('df table 2', df_table_1)
         df_table_1.loc['Total']=df_table_1.sum()
+
         # st.write('latest', df_table_1)
         # st.write('latest', df_table_1.shape)
         if df_table_1.shape > (3,7):
@@ -921,34 +969,33 @@ with st.expander('Analysis of Betting Results across 1 to 5 factors'):
     # st.write('test',reset_data)
     reset_data=reset_data.pivot(index='result_all',columns='total_factor',values='winning').fillna(0)
     # st.write('look',reset_data)
-    reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
+    dfBool=pd.Series(reset_data.columns.isin([3,4,5]) )
+    reset_data['betting_factor_total']=reset_data[reset_data.columns[dfBool]].sum(axis=1)
+    # reset_data['betting_factor_total']=reset_data[3]+reset_data[4]+reset_data[5]
+    # reset_data['betting_factor_total']=reset_data.iloc[:,:-3].sum()
     reset_data=reset_data.sort_values(by='betting_factor_total',ascending=False)
 
     reset_data=reset_data.reset_index()
     # st.write('reset data', reset_data)
-    reset_data['result_all']=reset_data['result_all'].astype(float).round(1).astype(str)
+    reset_data['result_all']=reset_data['result_all'].astype(str)
     reset_data=reset_data.set_index('result_all')
+
     reset_data.loc['Total']=reset_data.sum()
-
-    reset_data.loc['Winning_Bets']=(reset_data.loc['1.0'])
-    reset_data.loc['Losing_Bets']=(reset_data.loc['-1.0'])
-    reset_data.loc['No. of Bets Made'] = reset_data.loc['1.0'] + reset_data.loc['-1.0']
+    # reset_data.loc['No. of Bets Made'] = reset_data.loc[['1','-1']].sum()
+    reset_data.loc['Winning_Bets']=(reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0))
+    reset_data.loc['Losing_Bets']=(reset_data.loc[reset_data.index.isin({'-1'})].sum(axis=0))
+    reset_data.loc['No. of Bets Made']=(reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0))+(reset_data.loc[reset_data.index.isin({'-1'})].sum(axis=0)) 
     reset_data.loc['PL_Bets']=reset_data.loc['Winning_Bets'] - reset_data.loc['Losing_Bets']
-    reset_data=reset_data.apply(pd.to_numeric, downcast='float')
-    reset_data.loc['% Winning'] = ((reset_data.loc['1.0']) /
-    (reset_data.loc['1.0'] + reset_data.loc['-1.0']) ).replace({'<NA>':np.NaN})
-
-    # reset_data.loc['No. of Bets Made'] = reset_data.loc[['1','-1']].sum() 
-    # reset_data=reset_data.apply(pd.to_numeric, downcast='integer')
-    # reset_data.loc['% Winning'] = ((reset_data.loc['1'] / reset_data.loc['No. of Bets Made'])).replace({'<NA>':np.NaN})
+    reset_data=reset_data.apply(pd.to_numeric, downcast='integer')
+    reset_data.loc['% Winning'] = ((reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0) / reset_data.loc['No. of Bets Made'])).replace({'<NA>':np.NaN})
     st.write('This shows the betting result')
+
     # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
-    reset_data = reset_data.style.format("{:.1f}", na_rep='-')
-    reset_data = reset_data.format(formatter="{:.1%}", subset=pd.IndexSlice[['% Winning'], :]).format(formatter="{:.0f}", subset=pd.IndexSlice[['1.0'], :]) \
-        .format(formatter="{:.0f}", subset=pd.IndexSlice[['0.0'], :]) \
-            .format(formatter="{:.0f}", subset=pd.IndexSlice[['-1.0'], :])
+    reset_data = reset_data.style.format("{:.0f}", na_rep='-')
+    reset_data = reset_data.format(formatter="{:.1%}", subset=pd.IndexSlice[['% Winning'], :])
 
     st.write(reset_data)
+    st.write('Broken down by the number of factors indicating the strength of the signal')
     # st.write('Broken down by the number of factors indicating the strength of the signal')
 
     # st.write('shows the number of games at each factor level')
@@ -1177,24 +1224,28 @@ with st.expander('Checking Performance where Total Factor = 2 or 3:  Additional 
         df_factor['power_diagnostic'] = (df_factor['power_pick'].where(factor_2_3_power_filter)) * df_factor['home_cover_result']
         # st.write(df_factor)
 
-        df_factor_table = df_factor['home_turnover_diagnostic'].value_counts()
-        away_turnover=df_factor['away_turnover_diagnostic'].value_counts()
-        home_cover=df_factor['home_cover_diagnostic'].value_counts()
-        away_cover=df_factor['away_cover_diagnostic'].value_counts()
-        power=df_factor['power_diagnostic'].value_counts()
+        df_factor_table = df_factor['home_turnover_diagnostic'].value_counts().reset_index().rename(columns={'home_turnover_diagnostic':'factor','count':'home_turnover_diagnostic'}).set_index('factor')
+        away_turnover=df_factor['away_turnover_diagnostic'].value_counts().reset_index().rename(columns={'away_turnover_diagnostic':'factor','count':'away_turnover_diagnostic'}).set_index('factor')
+        home_cover=df_factor['home_cover_diagnostic'].value_counts().reset_index().rename(columns={'home_cover_diagnostic':'factor','count':'home_cover_diagnostic'}).set_index('factor')
+        away_cover=df_factor['away_cover_diagnostic'].value_counts().reset_index().rename(columns={'away_cover_diagnostic':'factor','count':'away_cover_diagnostic'}).set_index('factor')
+        power=df_factor['power_diagnostic'].value_counts().reset_index().rename(columns={'power_diagnostic':'factor','count':'power_diagnostic'}).set_index('factor')
         df_factor_table_1=pd.concat([df_factor_table,away_turnover,home_cover,away_cover,power],axis=1)
-        df_factor_table_1['total_turnover'] = df_factor_table_1['home_turnover_diagnostic'].add (df_factor_table_1['away_turnover_diagnostic'])
+        # st.write('HERE', df_factor_table_1)
+        df_factor_table_1['total_turnover'] = df_factor_table_1['home_turnover_diagnostic'] + (df_factor_table_1['away_turnover_diagnostic'])
         # st.write(test)
         df_factor_table_1['total_season_cover'] = df_factor_table_1['home_cover_diagnostic'] + df_factor_table_1['away_cover_diagnostic']
         # st.write('df table 2', df_factor_table_1)
 
         df_factor_table_1=df_factor_table_1.reset_index()
-        df_factor_table_1['index']=df_factor_table_1['index'].astype(int)
-        # st.write('df table 2', df_factor_table_1)
-        df_factor_table_1['index']=df_factor_table_1['index'].astype(str)
-        # st.write('df table 2', df_factor_table_1)
+        # st.write(df_factor_table_1['factor'].round(1))
+        # st.write('reset data', df_table_1)
+        df_factor_table_1['index']=df_factor_table_1['factor'].astype(int).astype(str)
+        # st.write(df_factor_table_1['index'].round(1))
+        df_factor_table_1=df_factor_table_1.drop('factor',axis=1)
+        # st.write('df table 2', df_table_1)
         df_factor_table_1=df_factor_table_1.set_index('index')
-        # st.write('df table 2', df_factor_table_1)
+
+
         df_factor_table_1.loc['Total']=df_factor_table_1.sum()
         # st.write('latest', df_factor_table_1)
         # st.write('latest', df_factor_table_1.shape)
