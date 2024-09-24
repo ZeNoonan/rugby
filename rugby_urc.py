@@ -6,18 +6,18 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=19
+finished_week=1
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 number_of_teams=17
 min_factor=2
 
-results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2023_2024.xlsx')
+results_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2024_2025.xlsx')
 
 # id_excel=pd.read_excel('C:/Users/Darragh/Documents/Python/rugby/super_rugby_id.xlsx')
 
 def csv_save(x):
-    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2023_2024.csv')
+    x.to_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2024_2025.csv')
     return x
 csv_save(results_excel)
 
@@ -44,7 +44,7 @@ team_names_id=pd.read_csv('C:/Users/Darragh/Documents/Python/rugby/rugby_id.csv'
 # st.write(pd.read_csv(url))
 # data=pd.read_csv(url,parse_dates=['Date'])
 
-local='C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2023_2024.csv'
+local='C:/Users/Darragh/Documents/Python/rugby/rugby_results_urc_2024_2025.csv'
 
 # data=pd.read_csv(local,parse_dates=['Date'])
 data=(read_csv_data_date(local)).copy()
