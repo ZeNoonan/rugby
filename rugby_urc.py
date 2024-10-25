@@ -6,7 +6,7 @@ import datetime as dt
 from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
-finished_week=1
+finished_week=5
 placeholder_1=st.empty()
 placeholder_2=st.empty()
 number_of_teams=17
@@ -367,9 +367,10 @@ with st.expander('Season to Date Cover Factor by Team'):
     stdc_away=spread_3.rename(columns={'ID':'Away ID'})
     updated_df=updated_df.drop(['away_cover'],axis=1)
     updated_df=updated_df.rename(columns={'home_cover':'home_cover_result'})
-    # st.write('line 352 before merge', updated_df)
+    st.write('line 352 before merge', updated_df)
+    st.write('merging into stdc', stdc_home)
     updated_df=updated_df.merge(stdc_home,on=['Date','Week','Home ID'],how='left').rename(columns={'cover':'home_cover','cover_sign':'home_cover_sign'})
-    # st.write('line 354 after merge', updated_df)
+    st.write('line 354 after merge', updated_df)
     updated_df=pd.merge(updated_df,stdc_away,on=['Date','Week','Away ID'],how='left').rename(columns={'cover':'away_cover','cover_sign':'away_cover_sign'})
     updated_df_1=updated_df.copy()
     
@@ -422,11 +423,11 @@ with st.expander('Turnover Factor by Match Graph'):
         updated_df=pd.merge(updated_df,turnover_away,on=['Date','Week','Away ID'],how='left').rename(columns={'prev_turnover':'away_prev_turnover','turnover_sign':'away_turnover_sign'})
         return updated_df
 
-    st.write('code below here has the updated df which feeds into the Betting Slip Tab')
-    st.write('updated df_1 is just a copy of updated_df')
-    st.write('line 407 before function', updated_df)
+    # st.write('code below here has the updated df which feeds into the Betting Slip Tab')
+    # st.write('updated df_1 is just a copy of updated_df')
+    # st.write('line 427 before function', updated_df)
     updated_df = turnover_data_prep_2(turnover_matches, updated_df)
-    # st.write('line 409 after function', updated_df)
+    # st.write('line 429 after function', updated_df)
     updated_df_intercept = turnover_data_prep_2(intercept_matches, updated_df_1)
     interecept_extract_to_merge=updated_df_intercept.loc[:,['Week','Home Team','Away Team','Spread','home_turnover_sign','away_turnover_sign']]\
     .rename(columns={'home_turnover_sign':'home_intercept_sign','away_turnover_sign':'away_intercept_sign'})
@@ -504,7 +505,7 @@ with st.expander('Penalty Factor by Match Graph'):
 
 
 with placeholder_2.expander('Betting Slip Matches'):
-    # AgGrid(updated_df)
+    # st.write(updated_df)
     updated_df=pd.merge(updated_df,interecept_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,sin_bin_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
     updated_df=pd.merge(updated_df,penalty_extract_to_merge,on=['Week','Home Team','Away Team','Spread'],how='outer')
@@ -608,9 +609,9 @@ with placeholder_2.expander('Betting Slip Matches'):
     df_extract=betting_matches.loc[:,['Week','Date','Home Team','Away Team','total_factor','bet_on','Spread','Opening Spread','power_pick','home_cover','away_cover',
                       'home_turnover_sign','away_turnover_sign','momentum_pick']].set_index(['Date','Home Team','Away Team','total_factor','bet_on','Spread','Opening Spread'])
     
-    st.write(df_extract.loc[df_extract['Week']==(finished_week+1)].reset_index().set_index(['Week','Date','Home Team','Away Team','total_factor','bet_on','Spread','Opening Spread']).style.format({'home_power':"{:.1f}",'away_power':"{:.1f}",'result':"{:.0f}",'Home Points':"{:.0f}",'Date':"{:%d.%m.%Y}",
-                                           'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover':"{:.0f}",'away_cover':"{:.0f}",
-                                           'calculated_spread':"{:.1f}",'Spread':"{:.1f}"}).applymap(color_recommend) )
+    # st.write(df_extract.loc[df_extract['Week']==(finished_week+1)].reset_index().set_index(['Week','Date','Home Team','Away Team','total_factor','bet_on','Spread','Opening Spread']).style.format({'home_power':"{:.1f}",'away_power':"{:.1f}",'result':"{:.0f}",'Home Points':"{:.0f}",'Date':"{:%d.%m.%Y}",
+    #                                        'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover':"{:.0f}",'away_cover':"{:.0f}",
+    #                                        'calculated_spread':"{:.1f}",'Spread':"{:.1f}"}) )
 
     st.write(betting_matches[betting_matches['Week']==(finished_week+1)].set_index('Week').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}",'result':"{:.0f}",'Home Points':"{:.0f}",'Date':"{:%d.%m.%Y}",
                                            'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover':"{:.0f}",'away_cover':"{:.0f}",
@@ -620,57 +621,77 @@ with placeholder_2.expander('Betting Slip Matches'):
                                            'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover':"{:.0f}",'away_cover':"{:.0f}",
                                            'calculated_spread':"{:.1f}",'Spread':"{:.1f}"}))
 
+
+    def color_recommend(value):
+        if value == -1:
+            color = 'red'
+        elif value == 1:
+            color = 'green'
+        else:
+            return
+        return f'background-color: {color}'
+
+    df_extract=betting_matches.loc[:,['Week','Date','Home Team','Away Team','total_factor','bet_on','Spread','power_pick','home_cover_sign','away_cover_sign',
+                      'home_turnover_sign','away_turnover_sign']].set_index(['Date','Home Team','Away Team','total_factor','bet_on','Spread'])
+    # df_extract.query('Week==')
+    st.write(df_extract.loc[df_extract['Week']==(finished_week+1)].reset_index().set_index(['Week','Date','Home Team','Away Team','total_factor','bet_on','Spread'])\
+              .style.format({'home_power':"{:.1f}",'away_power':"{:.1f}",'result':"{:.0f}",'Home Points':"{:.0f}",'Date':"{:%d.%m.%Y}",
+                                           'Away Points':"{:.0f}",'Week':"{:.0f}",'home_cover_sign':"{:.0f}",'away_cover_sign':"{:.0f}",
+                                           'calculated_spread':"{:.1f}",'Spread':"{:.1f}"}).applymap(color_recommend))
+
+
+
     presentation_betting_matches=betting_matches.copy()
 
     # https://towardsdatascience.com/7-reasons-why-you-should-use-the-streamlit-aggrid-component-2d9a2b6e32f0
-    grid_height = st.number_input("Grid height", min_value=400, value=850, step=100)
-    gb = GridOptionsBuilder.from_dataframe(presentation_betting_matches)
-    gb.configure_column("Spread", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
-    gb.configure_column("home_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
-    gb.configure_column("away_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
-    gb.configure_column("Date", type=["dateColumnFilter","customDateTimeFormat"], custom_format_string='dd-MM-yyyy', pivot=True)
-    gb.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
+    # grid_height = st.number_input("Grid height", min_value=400, value=850, step=100)
+    # gb = GridOptionsBuilder.from_dataframe(presentation_betting_matches)
+    # gb.configure_column("Spread", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
+    # gb.configure_column("home_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
+    # gb.configure_column("away_power", type=["numericColumn","numberColumnFilter","customNumericFormat"], precision=1, aggFunc='sum')
+    # gb.configure_column("Date", type=["dateColumnFilter","customDateTimeFormat"], custom_format_string='dd-MM-yyyy', pivot=True)
+    # gb.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
 
 
 
-    test_cellsytle_jscode = JsCode("""
-    function(params) {
-        if (params.value < 0) {
-        return {
-            'color': 'red',
-        }
-        } else {
-            return {
-                'color': 'black',
-            }
-        }
-    };
-    """)
-    # # https://github.com/PablocFonseca/streamlit-aggrid/blob/main/st_aggrid/grid_options_builder.py
-    gb.configure_column(field="Spread", cellStyle=test_cellsytle_jscode)
-    gb.configure_column("home_power", cellStyle=test_cellsytle_jscode)
-    gb.configure_column("away_power", cellStyle=test_cellsytle_jscode)
+    # test_cellsytle_jscode = JsCode("""
+    # function(params) {
+    #     if (params.value < 0) {
+    #     return {
+    #         'color': 'red',
+    #     }
+    #     } else {
+    #         return {
+    #             'color': 'black',
+    #         }
+    #     }
+    # };
+    # """)
+    # # # https://github.com/PablocFonseca/streamlit-aggrid/blob/main/st_aggrid/grid_options_builder.py
+    # gb.configure_column(field="Spread", cellStyle=test_cellsytle_jscode)
+    # gb.configure_column("home_power", cellStyle=test_cellsytle_jscode)
+    # gb.configure_column("away_power", cellStyle=test_cellsytle_jscode)
 
 
-    # gb.configure_pagination()
-    # gb.configure_side_bar()
-    gb.configure_grid_options(domLayout='normal')
-    gridOptions = gb.build()
-    grid_response = AgGrid(
-        presentation_betting_matches, 
-        gridOptions=gridOptions,
-        height=grid_height, 
-        width='100%',
-        # data_return_mode=return_mode_value, 
-        # update_mode=update_mode_value,
-        # fit_columns_on_grid_load=fit_columns_on_grid_load,
-        allow_unsafe_jscode=True, #Set it to True to allow jsfunction to be injected
-        enable_enterprise_modules=True,
-    )
+    # # gb.configure_pagination()
+    # # gb.configure_side_bar()
+    # gb.configure_grid_options(domLayout='normal')
+    # gridOptions = gb.build()
+    # grid_response = AgGrid(
+    #     presentation_betting_matches, 
+    #     gridOptions=gridOptions,
+    #     height=grid_height, 
+    #     width='100%',
+    #     # data_return_mode=return_mode_value, 
+    #     # update_mode=update_mode_value,
+    #     # fit_columns_on_grid_load=fit_columns_on_grid_load,
+    #     allow_unsafe_jscode=True, #Set it to True to allow jsfunction to be injected
+    #     enable_enterprise_modules=True,
+    # )
 
-    # container.grid_response
-    # AgGrid(betting_matches.sort_values('Date').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}"}))
-    # AgGrid(betting_matches.sort_values('Date'))
+    # # container.grid_response
+    # # AgGrid(betting_matches.sort_values('Date').style.format({'home_power':"{:.1f}",'away_power':"{:.1f}"}))
+    # # AgGrid(betting_matches.sort_values('Date'))
     # update
 
 
