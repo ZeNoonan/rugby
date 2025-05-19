@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 import altair as alt
 import datetime as dt
-from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
+# from st_aggrid import AgGrid, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 
 st.set_page_config(layout="wide")
 finished_week=18
@@ -295,7 +295,7 @@ grouped = test_df_2.groupby('ID')
 ranking_power=[]
 for name, group in grouped:
     # st.write('name', name, 'group', group)
-    dfseq = pd.DataFrame.from_dict({'Week': range( -3,(finished_week+1) )}).merge(group, on='Week', how='outer').fillna(np.NaN)
+    dfseq = pd.DataFrame.from_dict({'Week': range( -3,(finished_week+1) )}).merge(group, on='Week', how='outer').fillna(np.nan)
     dfseq['ID']=dfseq['ID'].fillna(method='ffill')
     dfseq['home_pts_adv']=dfseq['home_pts_adv'].fillna(0)
     dfseq['spread']=dfseq['spread'].fillna(0)
@@ -1008,7 +1008,7 @@ with st.expander('Analysis of Betting Results across 1 to 5 factors'):
     reset_data.loc['No. of Bets Made']=(reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0))+(reset_data.loc[reset_data.index.isin({'-1'})].sum(axis=0)) 
     reset_data.loc['PL_Bets']=reset_data.loc['Winning_Bets'] - reset_data.loc['Losing_Bets']
     reset_data=reset_data.apply(pd.to_numeric, downcast='integer')
-    reset_data.loc['% Winning'] = ((reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0) / reset_data.loc['No. of Bets Made'])).replace({'<NA>':np.NaN})
+    reset_data.loc['% Winning'] = ((reset_data.loc[reset_data.index.isin({'1'})].sum(axis=0) / reset_data.loc['No. of Bets Made'])).replace({'<NA>':np.nan})
     st.write('This shows the betting result')
 
     # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
@@ -1186,7 +1186,7 @@ with placeholder_1.expander('Weekly Results'):
     graph_pl_data['Week']=graph_pl_data['Week'].astype(int)
     graph_pl_data['total_result']=graph_pl_data['week_result'].cumsum()
     graph_pl_data=graph_pl_data.melt(id_vars='Week',var_name='category',value_name='result')
-    df9.loc['% Winning'] = ((df9.loc['1.0']) / (df9.loc['1.0'] + df9.loc['-1.0']) ).replace({'<NA>':np.NaN})
+    df9.loc['% Winning'] = ((df9.loc['1.0']) / (df9.loc['1.0'] + df9.loc['-1.0']) ).replace({'<NA>':np.nan})
     table_test=df9.copy()
     # https://stackoverflow.com/questions/64428836/use-pandas-style-to-format-index-rows-of-dataframe
     df9 = df9.style.format("{:.1f}", na_rep='-')
